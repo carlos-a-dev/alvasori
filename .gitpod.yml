@@ -1,0 +1,18 @@
+image: gitpod/workspace-node:latest
+
+tasks:
+  - name: Start
+    before: npm i -g @quasar/cli
+    init: yarn
+    command: quasar dev
+    openMode: split-left
+
+vscode:
+  extensions:
+    - TabNine.tabnine-vscode
+    - EditorConfig.EditorConfig
+    - dbaeumer.vscode-eslint
+    - wix.vscode-import-cost
+    - Vue.volar
+    - gamunu.vscode-yarn
+    - wayou.vscode-todo-highlight
