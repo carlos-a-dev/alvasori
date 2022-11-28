@@ -36,10 +36,13 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useConfigStore } from 'src/stores/config'
 
-const title = computed(() => process.env.APP_NAME)
-const logoSrc = computed(() => process.env.APP_LOGO)
-const author = computed(() => 'Carlos Alvarez')
+const { config } = useConfigStore()
+
+const title = computed(() => config.app_name)
+const logoSrc = computed(() => config.logo_src)
+const author = computed(() => config.author)
 
 const leftDrawerOpen = ref(false)
 
