@@ -40,11 +40,11 @@ import { useConfigStore } from 'src/stores/config'
 
 const { config } = useConfigStore()
 
-const title = computed(() => config.app_name)
-const logoSrc = computed(() => config.logo_src)
-const author = computed(() => config.author)
+const title = computed<string>(() => config.app_name)
+const logoSrc = computed<string>(() => config.logo_src)
+const author = computed<string>(() => config.author)
 
-const leftDrawerOpen = ref(false)
+const leftDrawerOpen = ref<boolean>(false)
 
 function toggleLeftDrawer () {
   leftDrawerOpen.value = !leftDrawerOpen.value

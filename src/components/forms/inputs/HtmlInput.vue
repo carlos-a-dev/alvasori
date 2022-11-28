@@ -34,6 +34,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { Codemirror } from 'vue-codemirror'
+import { Extension } from '@codemirror/state'
 
 const props = defineProps<{
   modelValue: string
@@ -49,15 +50,13 @@ const value = computed({
   set: (value) => emit('update:modelValue', value)
 })
 
-const extensions = ref<unknown[]>([])
+const preview = ref<boolean>(true)
+const extensions = ref<Extension>()
 
 async function loadLanguage () {
   const { html } = await import('@codemirror/lang-html')
-
-  extensions.value.push(html())
+  extensions.value = [html()]
 }
 
 loadLanguage()
-
-const preview = ref(true)
 </script>
