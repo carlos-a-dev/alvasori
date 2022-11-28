@@ -23,7 +23,7 @@ jobs:
       - name: Install
         run: |
           npm i -g @quasar/cli
-          npm ci
+          yarn
       - name: Build
         run: |
           quasar build
