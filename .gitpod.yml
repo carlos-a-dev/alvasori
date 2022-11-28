@@ -1,5 +1,9 @@
 image: gitpod/workspace-node:latest
 
+ports:
+- port: 9000
+- port: 4000
+
 tasks:
   - name: Start
     before: npm i -g @quasar/cli
