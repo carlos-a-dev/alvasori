@@ -15,8 +15,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" side="left" class="bg-primary" overlay>
-      <!-- drawer content -->
-      <div><span>Carlos</span></div>
+      <SidebarMenu />
     </q-drawer>
 
     <q-page-container>
@@ -37,6 +36,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useConfigStore } from 'src/stores/config'
+import SidebarMenu from 'src/components/layout/SidebarMenu.vue'
 
 const { config } = useConfigStore()
 
