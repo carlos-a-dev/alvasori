@@ -16,7 +16,7 @@ jobs:
       - name: Cache
         uses: actions/cache@v1
         with:
-          path: ~/node_modules
+          path: node_modules
           key: ${{ runner.os }}-node-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node-
@@ -29,7 +29,7 @@ jobs:
           quasar build
           
       - name: Compress
-        run: tar -cvf "artifact.tar" dist/spa
+        run: tar -cf "artifact.tar" dist/spa
           
       - name: Upload artifact
         uses: actions/upload-artifact@main
