@@ -91,7 +91,7 @@ module.exports = configure(function (/* ctx */) {
 
       extendViteConf (viteConf) {
         // do something with viteConf... change it in-place
-        Object.assign(viteConf.server, {
+        Object.assign(viteConf.server ?? {}, {
           hmr: {
             protocol: 'wss',
             clientPort: 443

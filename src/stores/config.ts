@@ -1,6 +1,6 @@
 import { getCssVar } from 'quasar'
 import { defineStore } from 'pinia'
-import { getRc, fetchAndActivate, getValue, getAll, isAppInitialized, Value } from 'src/composables/firebase/use-remote-config'
+import { getRc, fetchAndActivate, getValue, getAll, isAppInitialized } from 'src/composables/firebase/use-remote-config'
 
 const defaultConfig:{ [k: string]: string; } = {
   app_name: process.env.APP_NAME ?? 'Compay',
@@ -80,7 +80,6 @@ export const useConfigStore = defineStore('config', {
       const remoteConfig = getRc()
       await fetchAndActivate(remoteConfig)
       getParamTypes()
-      console.log('carlos')
       this.$patch({ config: getConfig() })
     }
   }
