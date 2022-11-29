@@ -13,5 +13,4 @@ const block = ref<Block>({
   description: 'This is as new block.',
   content: '<h1>Hello world!</h1>'
 })
-
 </script>

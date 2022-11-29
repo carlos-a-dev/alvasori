@@ -14,7 +14,8 @@ const routes: RouteRecordRaw[] = [
           {
             path: 'block',
             children: [
-              { path: 'new', component: () => import('pages/admin/block/NewPage.vue') }
+              { path: 'new', component: () => import('pages/admin/block/NewPage.vue') },
+              { path: 'edit/:id', component: () => import('pages/admin/block/EditPage.vue') }
             ]
           }
         ]
