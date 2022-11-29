@@ -22,7 +22,7 @@ const menuItems = ref([
   },
   {
     label: 'New Block',
-    icon: 'mdi-pencil',
+    icon: 'mdi-code-tags',
     link: '/admin/block/new',
     children: []
   }
