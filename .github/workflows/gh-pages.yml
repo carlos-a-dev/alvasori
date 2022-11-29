@@ -31,7 +31,9 @@ jobs:
           npm i -g @quasar/cli
           yarn install --no-progress --non-interactive
       - name: Creating .env file
-        run: echo ${{ secrets.ENV_FILE }} > .env
+        run: |
+          echo ${{ secrets.ENV_FILE }} > .env
+          cat .env
       - name: Build
         run: |
           quasar build -m spa
