@@ -16,7 +16,7 @@ jobs:
       
       - name: Get npm cache directory
         id: npm-cache-dir
-        run: echo "dir=$(npm config get cache)" >> $GITHUB_OUTPUT
+        run: echo "dir=$(npm root -g)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v3
         id: node-cache # use this to check for `cache-hit` (`steps.node-cache.outputs.cache-hit != 'true'`)
         with:
@@ -29,10 +29,10 @@ jobs:
       - name: Install
         run: |
           npm i -g @quasar/cli
-          yarn
+          yarn install --no-progress --non-interactive
       - name: Build
         run: |
-          quasar build
+          quasar build -m spa
           
       - name: Compress
         run: tar --dereference --hard-dereference --directory "dist/spa/" -cf "artifact.tar" .
