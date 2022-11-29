@@ -34,6 +34,10 @@ jobs:
         run: |
           echo "${{ secrets.ENV_FILE }}" > .env
           cat .env
+      - name: Creating CNAME file
+        run: |
+          echo "alvasori.net" > CNAME
+          cat CNAME
       - name: Build
         run: |
           quasar build -m spa
