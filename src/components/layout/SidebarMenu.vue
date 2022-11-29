@@ -21,8 +21,14 @@ const menuItems = ref([
     children: []
   },
   {
-    label: 'New Block',
+    label: 'Blocks',
     icon: 'mdi-code-tags',
+    link: '/admin/block',
+    children: []
+  },
+  {
+    label: 'New Block',
+    icon: 'mdi-file-code-outline',
     link: '/admin/block/new',
     children: []
   }
