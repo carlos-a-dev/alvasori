@@ -5,11 +5,14 @@ ports:
 - port: 4000
 
 tasks:
-  - name: Start
-    before: npm i -g @quasar/cli
-    init: yarn
+  - name: Setup
+    init: |
+      yarn
+      npm i -g @quasar/cli
+
+  - name: Start the server
     command: quasar dev
-    openMode: split-left
+    openMode: split-right
 
   - name: Restore .env file
     command: |
