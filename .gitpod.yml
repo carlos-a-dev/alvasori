@@ -1,21 +1,22 @@
 image: gitpod/workspace-node:latest
 
-ports:
-- port: 9000
-- port: 4000
-
 tasks:
   - name: Setup
     init: |
       yarn
       npm i -g @quasar/cli
+      gp sync-done setup
+      exit
 
-  - name: Start the server
+
+  - name: Install and serve project
+    init: gp sync-await setup
     command: quasar dev
     openMode: split-right
 
   - name: Restore .env file
-    command: |
+    before: |
+      eval $(command gp env -e)
       if [ -f .env ]; then
         # If this workspace already has a .env, don't override it
         echo "Found .env in workspace"
@@ -26,13 +27,14 @@ tasks:
           cp .env.example .env
         else
           # After making changes to .env, run this line to persist it to $DOTENV
-          #   gp env DOTENV="$(base64 .env | tr -d '\n')"
+          #   gp env DOTENV="$(base64 .env | tr -d '\n\r')"
           #
           # Environment variables set this way are shared between all your workspaces for this repo
           echo "Restoring .env from Gitpod"
           echo "${DOTENV}" | base64 -d > .env
         fi
       fi
+      exit
 
 vscode:
   extensions:
