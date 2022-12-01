@@ -9,38 +9,31 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
           node-version: '16'
       
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        run: echo "dir=$(npm root -g)" >> $GITHUB_OUTPUT
       - uses: actions/cache@v3
         id: node-cache # use this to check for `cache-hit` (`steps.node-cache.outputs.cache-hit != 'true'`)
         with:
-          path: |
-            node_modules
-            ${{ steps.npm-cache-dir.outputs.dir }}
+          path: node_modules
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
           restore-keys: ${{ runner.os }}-yarn-
       
       - name: Install
-        run: |
-          npm i -g @quasar/cli
-          yarn install --no-progress --non-interactive
+        run: yarn install --no-progress --non-interactive
+        
       - name: Creating .env file
-        run: |
-          echo "${{ secrets.ENV_FILE }}" | base64 -d > .env
-          cat .env
+        run: echo "${{ secrets.ENV_FILE }}" | base64 -d > .env
+      
       - name: Creating CNAME file
-        run: |
-          echo "alvasori.net" > CNAME
-          cat CNAME
+        run: echo "alvasori.net" > CNAME
+      
       - name: Build
-        run: |
-          quasar build -m spa
+        run: yarn quasar build -m spa
+      
       - name: Copying 404.html file
         run: cp 404.html dist/spa/404.html
           
