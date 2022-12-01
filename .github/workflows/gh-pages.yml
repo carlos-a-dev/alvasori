@@ -32,7 +32,7 @@ jobs:
           yarn install --no-progress --non-interactive
       - name: Creating .env file
         run: |
-          echo $secrets.ENV_FILE > .env
+          echo "${{ secrets.ENV_FILE }}" > .env
           cat .env
       - name: Creating CNAME file
         run: |
