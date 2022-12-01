@@ -7,9 +7,10 @@ tasks:
       gp sync-done setup
       exit
 
-  - name: Install and serve project
+  - name: Serve project
     init: gp sync-await setup
-    command: yarn dev
+    command: yarn serve
+    openMode: split-right
 
   - name: Restore .env file
     before: |
