@@ -4,15 +4,12 @@ tasks:
   - name: Setup
     init: |
       yarn
-      npm i -g @quasar/cli
       gp sync-done setup
       exit
 
-
   - name: Install and serve project
     init: gp sync-await setup
-    command: quasar dev
-    openMode: split-right
+    command: yarn dev
 
   - name: Restore .env file
     before: |
