@@ -1,5 +1,5 @@
 import { getApp } from 'src/composables/firebase/use-firebase'
-import { getFirestore, doc, getDoc, Firestore } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, Firestore } from 'firebase/firestore'
 
 export * from 'firebase/firestore'
 export { isAppInitialized } from 'src/composables/firebase/use-firebase'
@@ -20,4 +20,8 @@ export async function getDocument (id: string, collection: string, appName = '[D
   const docSnap = await getDoc(doc(getFs(appName), collection, id))
 
   return docSnap.exists() ? docSnap.data() : null
+}
+
+export async function setDocument (id: string, collection: string, data: unknown, appName = '[DEFAULT]') {
+  await setDoc(doc(getFs(appName), collection, id), data)
 }

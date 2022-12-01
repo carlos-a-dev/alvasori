@@ -1,11 +1,6 @@
 <template>
   <q-card flat>
     <q-card-section>
-      <div class="text-h6">
-        New Block
-      </div>
-    </q-card-section>
-    <q-card-section>
       <q-form
         @submit="onSubmit"
         @reset="onReset"
@@ -52,7 +47,6 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useQuasar } from 'quasar'
 import HtmlInput from 'components/forms/inputs/HtmlInput.vue'
 
 export interface Block {
@@ -66,7 +60,10 @@ interface Props {
   block: Block
 }
 
-const $q = useQuasar()
+// eslint-disable-next-line func-call-spacing
+const emit = defineEmits<{
+  (e: 'onSubmit', block: Block): void
+ }>()
 
 const props = withDefaults(defineProps<Props>(), {
   block: () => ({
@@ -76,21 +73,14 @@ const props = withDefaults(defineProps<Props>(), {
   })
 })
 
-const block = ref(props.block)
+const block = ref<Block>({ ...props.block })
 
 function onSubmit () {
-  $q.notify({
-    color: 'green-4',
-    textColor: 'white',
-    icon: 'cloud_done',
-    message: 'Submitted'
-  })
+  emit('onSubmit', block.value)
 }
 
 function onReset () {
-  block.value.code = props.block.code
-  block.value.description = props.block.description
-  block.value.content = props.block.content
+  block.value = { ...props.block }
 }
 
 </script>
