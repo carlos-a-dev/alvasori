@@ -13,5 +13,6 @@
     "vue"
   ],
   "typescript.tsdk": "node_modules/typescript/lib",
-  "extensions.ignoreRecommendations": true
+  "extensions.ignoreRecommendations": true,
+  "files.autoSaveDelay": 15000
 }
