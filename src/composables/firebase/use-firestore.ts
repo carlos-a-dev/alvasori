@@ -1,5 +1,5 @@
 import { getApp } from 'src/composables/firebase/use-firebase'
-import { getFirestore, doc, getDoc, setDoc, Firestore } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, Firestore, DocumentData, FirestoreDataConverter, addDoc, collection } from 'firebase/firestore'
 
 export * from 'firebase/firestore'
 export { isAppInitialized } from 'src/composables/firebase/use-firebase'
@@ -16,12 +16,53 @@ export function getFs (appName = '[DEFAULT]'): Firestore {
   return firestore
 }
 
-export async function getDocument (id: string, collection: string, appName = '[DEFAULT]') {
-  const docSnap = await getDoc(doc(getFs(appName), collection, id))
+// GET
+export async function getDocument<T = DocumentData> (
+  id: string,
+  collection: string,
+  converter: FirestoreDataConverter<T> | null = null,
+  appName = '[DEFAULT]'
+): Promise<T | null> {
+  if (converter !== null) {
+    const ref = doc(getFs(appName), collection, id).withConverter(converter)
+    const docSnap = await getDoc<T>(ref)
+    return docSnap.exists() ? docSnap.data() : null
+  }
 
-  return docSnap.exists() ? docSnap.data() : null
+  const ref = doc(getFs(appName), collection, id)
+  const docSnap = await getDoc(ref)
+  return docSnap.exists() ? docSnap.data() as T : null
 }
 
-export async function setDocument (id: string, collection: string, data: unknown, appName = '[DEFAULT]') {
-  await setDoc(doc(getFs(appName), collection, id), data)
+// SET
+export async function setDocument<T = unknown> (
+  id: string,
+  mycollection: string,
+  data: T,
+  converter: FirestoreDataConverter<T> | null = null,
+  appName = '[DEFAULT]'
+): Promise<void> {
+  if (converter !== null) {
+    const ref = doc(getFs(appName), mycollection, id).withConverter<T>(converter)
+    return setDoc<T>(ref, data)
+  }
+
+  const ref = doc(getFs(appName), mycollection, id)
+  return setDoc(ref, data as unknown)
+}
+
+// ADD
+export async function addDocument<T = unknown> (
+  mycollection: string,
+  data: T,
+  converter: FirestoreDataConverter<T> | null = null,
+  appName = '[DEFAULT]'
+) {
+  if (converter !== null) {
+    const collectionRef = collection(getFs(appName), mycollection).withConverter<T>(converter)
+    return addDoc<T>(collectionRef, data)
+  }
+
+  const collectionRef = collection(getFs(appName), mycollection)
+  return addDoc(collectionRef, data as unknown)
 }

@@ -35,7 +35,7 @@ const menuItems = ref([
   {
     label: 'Edit Block',
     icon: 'mdi-file-code-outline',
-    link: '/admin/block/edit/test-block',
+    link: '/admin/block/edit/test-block-1',
     children: []
   }
 ])

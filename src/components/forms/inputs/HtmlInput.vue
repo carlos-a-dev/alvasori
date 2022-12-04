@@ -14,7 +14,6 @@
           <div class="col q-pa-sm">
             <Codemirror
               :style="{ height: '400px' }"
-              :autofocus="true"
               :indent-with-tab="true"
               :tab-size="2"
               :extensions="extensions"

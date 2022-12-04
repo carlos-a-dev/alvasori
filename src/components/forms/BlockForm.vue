@@ -6,12 +6,22 @@
         @reset="onReset"
         class="q-gutter-md"
       >
+
+        <q-toggle
+            name="enabled"
+            v-model="block.enabled"
+            label="Enabled"
+        />
+
         <q-input
-          name="code"
-          v-model="block.code"
-          label="Block Code *"
-          hint="A unique block name to identify it."
+          name="name"
+          v-model="block.name"
+          label="Name"
+          hint="Must be unique"
           outlined
+          required
+          :autofocus="!editMode"
+          :readonly="editMode"
           lazy-rules
           :rules="[ val => val && val.length > 0 || 'Please type something']"
           dense
@@ -20,6 +30,7 @@
         <q-input
           name="description"
           v-model="block.description"
+          :autofocus="editMode"
           type="textarea"
           label="Description"
           hint="Optional"
@@ -48,32 +59,30 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import HtmlInput from 'components/forms/inputs/HtmlInput.vue'
-
-export interface Block {
-  id?: string,
-  code: string,
-  description: string,
-  content: string
-}
+import { BlockInterface } from 'src/models/BlockModel'
 
 interface Props {
-  block: Block
+  block: BlockInterface,
+  editMode?: boolean
 }
 
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-  (e: 'onSubmit', block: Block): void
+  (e: 'onSubmit', block: BlockInterface): void
  }>()
 
 const props = withDefaults(defineProps<Props>(), {
   block: () => ({
-    code: '',
+    id: '',
+    enabled: true,
+    name: '',
     description: '',
     content: ''
-  })
+  }),
+  editMode: false
 })
 
-const block = ref<Block>({ ...props.block })
+const block = ref<BlockInterface>({ ...props.block })
 
 function onSubmit () {
   emit('onSubmit', block.value)
