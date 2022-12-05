@@ -24,8 +24,7 @@ const columns = [
   { name: 'id', label: 'ID', field: 'id', sortable: true },
   { name: 'enabled', label: 'Enabled', field: 'enabled', sortable: true },
   { name: 'name', label: 'Name', field: 'name', sortable: true },
-  { name: 'description', label: 'Description', field: 'description', sortable: true },
-  { name: 'content', label: 'Content', field: 'content', sortable: false }
+  { name: 'description', label: 'Description', field: 'description', sortable: true }
 ]
 
 </script>

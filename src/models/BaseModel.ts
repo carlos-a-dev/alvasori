@@ -1,4 +1,4 @@
-import { getDocument, setDocument, FirestoreDataConverter } from 'src/composables/firebase/use-firestore'
+import { getDocument, setDocument, FirestoreDataConverter, addDocument, getDocuments, QueryConstraint } from 'src/composables/firebase/use-firestore'
 
 type Constructor<T> = { new (data: unknown): T }
 function activator<T> (Type: { new(): T }): T {
@@ -6,9 +6,9 @@ function activator<T> (Type: { new(): T }): T {
 }
 
 export default abstract class BaseModel {
-  id?: string = ''
+  id?: string
 
-  protected static documentName = ''
+  protected static documentName: string
 
   // Firestore data converter
   protected static dataConverter: FirestoreDataConverter<unknown> | null = null
@@ -35,5 +35,18 @@ export default abstract class BaseModel {
     const $this = (this as any)
     await setDocument<T>(id, $this.documentName, data, $this.dataConverter)
     return $this.get(id)
+  }
+
+  static async add<T> (this: Constructor<T>, data: T): Promise<string> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const $this = (this as any)
+    const ref = await addDocument<T>($this.documentName, data, $this.dataConverter)
+    return ref.id
+  }
+
+  static async getAll<T> (this: Constructor<T>, constraints: QueryConstraint[] = []) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const $this = (this as any)
+    return await getDocuments($this.documentName, constraints, $this.dataConverter)
   }
 }

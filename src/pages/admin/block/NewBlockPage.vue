@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <q-toolbar>
-      <q-toolbar-title class="text-h4">New Block</q-toolbar-title>
+      <q-toolbar-title class="text-h4">New Block [ {{ block.id }} ]</q-toolbar-title>
       <q-btn
         flat rounded
         color="primary"
@@ -30,10 +30,11 @@ const block = ref<BlockModel>(BlockModel.create({
   content: ''
 }))
 
-async function onSubmit (block: BlockInterface) {
+async function onSubmit (newBlock: BlockInterface) {
   loading.show()
   // TODO: change for add method
-  await BlockModel.set('test123', block)
+  const id = await BlockModel.add(newBlock)
+  block.value.id = id
   loading.hide()
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <q-toolbar>
-      <q-toolbar-title class="text-h4">New Block</q-toolbar-title>
+      <q-toolbar-title class="text-h4">Edit Block</q-toolbar-title>
       <q-btn
         flat rounded
         color="primary"
@@ -19,7 +19,7 @@
 import { onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import BlockForm from 'components/forms/BlockForm.vue'
-import BlockModel, { BlockInterface } from 'src/models/BlockModel'
+import BlockModel from 'src/models/BlockModel'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
@@ -45,9 +45,12 @@ async function load () {
 }
 
 // Save the block
-async function save (block: BlockInterface) {
+async function save (editedBlock: BlockModel) {
   loading.show()
-  await BlockModel.set(block.id as string, block)
+  const res = await BlockModel.set(editedBlock.id as string, editedBlock)
+  if (res !== null) {
+    block.value = res
+  }
   loading.hide()
 }
 

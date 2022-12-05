@@ -1,5 +1,5 @@
 import { getApp } from 'src/composables/firebase/use-firebase'
-import { getFirestore, doc, getDoc, setDoc, Firestore, DocumentData, FirestoreDataConverter, addDoc, collection } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, Firestore, DocumentData, FirestoreDataConverter, addDoc, collection, query, QueryConstraint, getDocs } from 'firebase/firestore'
 
 export * from 'firebase/firestore'
 export { isAppInitialized } from 'src/composables/firebase/use-firebase'
@@ -65,4 +65,21 @@ export async function addDocument<T = unknown> (
 
   const collectionRef = collection(getFs(appName), mycollection)
   return addDoc(collectionRef, data as unknown)
+}
+
+export async function getDocuments<T = DocumentData> (
+  mycollection: string,
+  queryConstraints: QueryConstraint[],
+  converter: FirestoreDataConverter<T> | null = null,
+  appName = '[DEFAULT]'
+) {
+  if (converter !== null) {
+    const ref = collection(getFs(appName), mycollection).withConverter(converter)
+    const q = query(ref, ...queryConstraints)
+    return await getDocs(q)
+  }
+
+  const ref = collection(getFs(appName), mycollection)
+  const q = query(ref, ...queryConstraints)
+  return await getDocs(q)
 }

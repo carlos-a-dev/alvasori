@@ -20,10 +20,14 @@
           hint="Must be unique"
           outlined
           required
+          :loading="checkingName"
+          @blur="checkName"
           :autofocus="!editMode"
           :readonly="editMode"
-          lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
+          :rules="[
+            val => val && val.length > 0 || 'Please type something',
+            async () => await checkName()
+          ]"
           dense
         />
 
@@ -59,20 +63,20 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import HtmlInput from 'components/forms/inputs/HtmlInput.vue'
-import { BlockInterface } from 'src/models/BlockModel'
+import BlockModel from 'src/models/BlockModel'
 
 interface Props {
-  block: BlockInterface,
+  block: BlockModel,
   editMode?: boolean
 }
 
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-  (e: 'onSubmit', block: BlockInterface): void
+  (e: 'onSubmit', block: BlockModel): void
  }>()
 
 const props = withDefaults(defineProps<Props>(), {
-  block: () => ({
+  block: () => BlockModel.create({
     id: '',
     enabled: true,
     name: '',
@@ -82,14 +86,26 @@ const props = withDefaults(defineProps<Props>(), {
   editMode: false
 })
 
-const block = ref<BlockInterface>({ ...props.block })
+const block = ref<BlockModel>(props.block)
+
+const checkingName = ref<boolean>(false)
 
 function onSubmit () {
   emit('onSubmit', block.value)
 }
 
 function onReset () {
-  block.value = { ...props.block }
+  block.value = props.block
+}
+
+async function checkName () {
+  if (props.editMode) {
+    return true
+  }
+  checkingName.value = true
+  const isAvailable = await BlockModel.isNameAvailable(block.value.name)
+  checkingName.value = false
+  return isAvailable || 'Name is not available'
 }
 
 </script>

@@ -1,4 +1,4 @@
-import { QueryDocumentSnapshot, SnapshotOptions, DocumentData } from 'src/composables/firebase/use-firestore'
+import { QueryDocumentSnapshot, SnapshotOptions, DocumentData, where, limit } from 'src/composables/firebase/use-firestore'
 import BaseModel from './BaseModel'
 
 export interface BlockInterface {
@@ -17,10 +17,9 @@ export default class BlockModel extends BaseModel implements BlockInterface {
   description = ''
   content = ''
 
-  test = 'this is a test'
-
   protected static dataConverter = {
     toFirestore (data: BlockModel): DocumentData {
+      delete data.id
       return { ...data }
     },
     fromFirestore (
@@ -34,8 +33,12 @@ export default class BlockModel extends BaseModel implements BlockInterface {
     }
   }
 
+  static async isNameAvailable (name:string): Promise<boolean> {
+    const snapshot = await BlockModel.getAll([where('name', '==', name), limit(1)])
+    return snapshot.empty
+  }
+
   asString () {
     return this.content
   }
 }
-//
