@@ -1,9 +1,8 @@
 import { getDocument, setDocument, FirestoreDataConverter, addDocument, getDocuments, QueryConstraint } from 'src/composables/firebase/use-firestore'
 
+// Helpers to get child class reference
 type Constructor<T> = { new (data: unknown): T }
-function activator<T> (Type: { new(): T }): T {
-  return new Type()
-}
+function activator<T> (Type: { new(): T }): T { return new Type() }
 
 export default abstract class BaseModel {
   id?: string
@@ -22,12 +21,7 @@ export default abstract class BaseModel {
   static async get<T> (this: Constructor<T>, id: string): Promise<T | null> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const $this = (this as any)
-    const data = await getDocument<typeof $this>(id, $this.documentName, $this.dataConverter)
-    if (data !== null) {
-      return data
-    }
-
-    return null
+    return await getDocument<T>(id, $this.documentName, $this.dataConverter)
   }
 
   static async set<T> (this: Constructor<T>, id: string, data: T): Promise<T | null> {
@@ -40,8 +34,7 @@ export default abstract class BaseModel {
   static async add<T> (this: Constructor<T>, data: T): Promise<string> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const $this = (this as any)
-    const ref = await addDocument<T>($this.documentName, data, $this.dataConverter)
-    return ref.id
+    return (await addDocument<T>($this.documentName, data, $this.dataConverter)).id
   }
 
   static async getAll<T> (this: Constructor<T>, constraints: QueryConstraint[] = []) {

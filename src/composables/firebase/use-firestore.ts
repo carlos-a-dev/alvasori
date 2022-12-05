@@ -23,15 +23,13 @@ export async function getDocument<T = DocumentData> (
   converter: FirestoreDataConverter<T> | null = null,
   appName = '[DEFAULT]'
 ): Promise<T | null> {
-  if (converter !== null) {
-    const ref = doc(getFs(appName), collection, id).withConverter(converter)
-    const docSnap = await getDoc<T>(ref)
-    return docSnap.exists() ? docSnap.data() : null
+  if (converter === null) {
+    const docSnap = await getDoc(doc(getFs(appName), collection, id))
+    return docSnap.exists() ? docSnap.data() as T : null
+  } else {
+    const docSnap = await getDoc<T>(doc(getFs(appName), collection, id).withConverter(converter))
+    return docSnap.exists() ? docSnap.data() as T : null
   }
-
-  const ref = doc(getFs(appName), collection, id)
-  const docSnap = await getDoc(ref)
-  return docSnap.exists() ? docSnap.data() as T : null
 }
 
 // SET
@@ -42,13 +40,9 @@ export async function setDocument<T = unknown> (
   converter: FirestoreDataConverter<T> | null = null,
   appName = '[DEFAULT]'
 ): Promise<void> {
-  if (converter !== null) {
-    const ref = doc(getFs(appName), mycollection, id).withConverter<T>(converter)
-    return setDoc<T>(ref, data)
-  }
-
-  const ref = doc(getFs(appName), mycollection, id)
-  return setDoc(ref, data as unknown)
+  return converter === null
+    ? setDoc(doc(getFs(appName), mycollection, id), data as unknown)
+    : setDoc<T>(doc(getFs(appName), mycollection, id).withConverter<T>(converter), data)
 }
 
 // ADD
@@ -58,28 +52,19 @@ export async function addDocument<T = unknown> (
   converter: FirestoreDataConverter<T> | null = null,
   appName = '[DEFAULT]'
 ) {
-  if (converter !== null) {
-    const collectionRef = collection(getFs(appName), mycollection).withConverter<T>(converter)
-    return addDoc<T>(collectionRef, data)
-  }
-
-  const collectionRef = collection(getFs(appName), mycollection)
-  return addDoc(collectionRef, data as unknown)
+  return converter === null
+    ? addDoc(collection(getFs(appName), mycollection), data as unknown)
+    : addDoc<T>(collection(getFs(appName), mycollection).withConverter<T>(converter), data)
 }
 
+// GET ALL
 export async function getDocuments<T = DocumentData> (
   mycollection: string,
   queryConstraints: QueryConstraint[],
   converter: FirestoreDataConverter<T> | null = null,
   appName = '[DEFAULT]'
 ) {
-  if (converter !== null) {
-    const ref = collection(getFs(appName), mycollection).withConverter(converter)
-    const q = query(ref, ...queryConstraints)
-    return await getDocs(q)
-  }
-
-  const ref = collection(getFs(appName), mycollection)
-  const q = query(ref, ...queryConstraints)
-  return await getDocs(q)
+  return converter === null
+    ? getDocs(query(collection(getFs(appName), mycollection), ...queryConstraints))
+    : getDocs(query(collection(getFs(appName), mycollection).withConverter(converter), ...queryConstraints))
 }

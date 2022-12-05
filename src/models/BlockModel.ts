@@ -34,8 +34,7 @@ export default class BlockModel extends BaseModel implements BlockInterface {
   }
 
   static async isNameAvailable (name:string): Promise<boolean> {
-    const snapshot = await BlockModel.getAll([where('name', '==', name), limit(1)])
-    return snapshot.empty
+    return (await BlockModel.getAll([where('name', '==', name), limit(1)])).empty
   }
 
   asString () {
