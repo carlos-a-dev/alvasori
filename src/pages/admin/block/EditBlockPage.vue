@@ -20,10 +20,11 @@ import { onMounted, ref } from 'vue'
 import { useQuasar } from 'quasar'
 import BlockForm from 'components/forms/BlockForm.vue'
 import BlockModel from 'src/models/BlockModel'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
+const router = useRouter()
 const route = useRoute()
-const { loading } = useQuasar()
+const { loading, notify } = useQuasar()
 
 // Data
 const block = ref<BlockModel | undefined>()
@@ -32,15 +33,14 @@ const loaded = ref<boolean>(false)
 // Load the block
 async function load () {
   loading.show()
-  const fetchedBlock = await BlockModel.get(route.params.id as string)
-  if (fetchedBlock === null) {
-    loading.hide()
-    // TODO: redirect to 404 page
-    return
+
+  block.value = await BlockModel.get(route.params.id as string) ?? undefined
+  if (block.value === null) {
+    router.push('/404')
+  } else {
+    loaded.value = true
   }
 
-  block.value = fetchedBlock
-  loaded.value = true
   loading.hide()
 }
 
@@ -52,6 +52,14 @@ async function save (editedBlock: BlockModel) {
     block.value = res
   }
   loading.hide()
+
+  notify({
+    type: 'positive',
+    message: 'Block updated!',
+    position: 'top'
+  })
+
+  router.push('/admin/block')
 }
 
 onMounted(load)

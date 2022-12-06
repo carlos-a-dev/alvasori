@@ -37,9 +37,11 @@ export default abstract class BaseModel {
     return (await addDocument<T>($this.documentName, data, $this.dataConverter)).id
   }
 
-  static async getAll<T> (this: Constructor<T>, constraints: QueryConstraint[] = []) {
+  static async getAll<T> (this: Constructor<T>, constraints: QueryConstraint[] = []): Promise<T[]> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const $this = (this as any)
-    return await getDocuments($this.documentName, constraints, $this.dataConverter)
+    const snapshot = await getDocuments<T>($this.documentName, constraints, $this.dataConverter)
+
+    return snapshot.docs.map(doc => doc.data() as T)
   }
 }
