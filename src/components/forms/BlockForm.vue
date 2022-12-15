@@ -6,20 +6,36 @@
         @reset="onReset"
         class="q-gutter-md"
       >
+
+        <q-toggle
+            name="enabled"
+            v-model="block.enabled"
+            label="Enabled"
+        />
+
         <q-input
-          name="code"
-          v-model="block.code"
-          label="Block Code *"
-          hint="A unique block name to identify it."
+          name="name"
+          v-model="block.name"
+          label="Name"
+          hint="Must be unique"
           outlined
+          required
+          :loading="checkingName"
+          @blur="checkName"
+          :autofocus="!editMode"
           lazy-rules
-          :rules="[ val => val && val.length > 0 || 'Please type something']"
+          :readonly="editMode"
+          :rules="[
+            val => val && val.length > 0 || 'Please type something',
+            async () => await checkName()
+          ]"
           dense
         />
 
         <q-input
           name="description"
           v-model="block.description"
+          :autofocus="editMode"
           type="textarea"
           label="Description"
           hint="Optional"
@@ -48,39 +64,49 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import HtmlInput from 'components/forms/inputs/HtmlInput.vue'
-
-export interface Block {
-  id?: string,
-  code: string,
-  description: string,
-  content: string
-}
+import BlockModel from 'src/models/BlockModel'
 
 interface Props {
-  block: Block
+  block: BlockModel,
+  editMode?: boolean
 }
 
 // eslint-disable-next-line func-call-spacing
 const emit = defineEmits<{
-  (e: 'onSubmit', block: Block): void
+  (e: 'onSubmit', block: BlockModel): void
  }>()
 
 const props = withDefaults(defineProps<Props>(), {
-  block: () => ({
-    code: '',
+  block: () => BlockModel.create({
+    id: '',
+    enabled: true,
+    name: '',
     description: '',
     content: ''
-  })
+  }),
+  editMode: false
 })
 
-const block = ref<Block>({ ...props.block })
+const block = ref<BlockModel>(props.block)
+
+const checkingName = ref<boolean>(false)
 
 function onSubmit () {
   emit('onSubmit', block.value)
 }
 
 function onReset () {
-  block.value = { ...props.block }
+  block.value = props.block
+}
+
+async function checkName () {
+  if (props.editMode) {
+    return true
+  }
+  checkingName.value = true
+  const isAvailable = await BlockModel.isNameAvailable(block.value.name)
+  checkingName.value = false
+  return isAvailable || 'Name is not available'
 }
 
 </script>

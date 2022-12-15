@@ -25,18 +25,6 @@ const menuItems = ref([
     icon: 'mdi-code-tags',
     link: '/admin/block',
     children: []
-  },
-  {
-    label: 'New Block',
-    icon: 'mdi-file-code-outline',
-    link: '/admin/block/new',
-    children: []
-  },
-  {
-    label: 'Edit Block',
-    icon: 'mdi-file-code-outline',
-    link: '/admin/block/edit/test-block',
-    children: []
   }
 ])
 </script>
