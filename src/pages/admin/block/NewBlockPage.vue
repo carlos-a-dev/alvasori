@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <q-toolbar>
-      <q-toolbar-title class="text-h4">New Block [ {{ block.id }} ]</q-toolbar-title>
+      <q-toolbar-title class="text-h4">New Block</q-toolbar-title>
       <q-btn
         flat rounded
         color="primary"
@@ -11,17 +11,19 @@
         icon="mdi-arrow-left"
       />
     </q-toolbar>
-    <BlockForm @onSubmit="onSubmit" :block="block" />
+    <BlockForm @onSubmit="save" :block="block" />
   </q-page>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
-import BlockModel, { BlockInterface } from 'src/models/BlockModel'
+import { useRouter } from 'vue-router'
+import BlockModel from 'src/models/BlockModel'
 import BlockForm from 'components/forms/BlockForm.vue'
 
-const { loading } = useQuasar()
+const router = useRouter()
+const { loading, notify } = useQuasar()
 
 const block = ref<BlockModel>(BlockModel.create({
   id: '',
@@ -30,11 +32,21 @@ const block = ref<BlockModel>(BlockModel.create({
   content: ''
 }))
 
-async function onSubmit (newBlock: BlockInterface) {
+// Save the block
+async function save (newBlock: BlockModel) {
   loading.show()
-  // TODO: change for add method
-  const id = await BlockModel.add(newBlock)
-  block.value.id = id
+  const blockId = await BlockModel.add(newBlock)
+  if (blockId !== null) {
+    block.value.id = blockId
+  }
   loading.hide()
+
+  notify({
+    type: 'positive',
+    message: 'Block created!',
+    position: 'top'
+  })
+
+  router.push('/admin/block')
 }
 </script>

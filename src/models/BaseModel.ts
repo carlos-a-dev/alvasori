@@ -1,4 +1,4 @@
-import { getDocument, setDocument, FirestoreDataConverter, addDocument, getDocuments, QueryConstraint } from 'src/composables/firebase/use-firestore'
+import { getDocument, setDocument, FirestoreDataConverter, addDocument, getDocuments, QueryConstraint, deleteDocument } from 'src/composables/firebase/use-firestore'
 
 // Helpers to get child class reference
 type Constructor<T> = { new (data: unknown): T }
@@ -21,7 +21,7 @@ export default abstract class BaseModel {
   static async get<T> (this: Constructor<T>, id: string): Promise<T | null> {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const $this = (this as any)
-    return await getDocument<T>(id, $this.documentName, $this.dataConverter)
+    return getDocument<T>(id, $this.documentName, $this.dataConverter)
   }
 
   static async set<T> (this: Constructor<T>, id: string, data: T): Promise<T | null> {
@@ -43,5 +43,11 @@ export default abstract class BaseModel {
     const snapshot = await getDocuments<T>($this.documentName, constraints, $this.dataConverter)
 
     return snapshot.docs.map(doc => doc.data() as T)
+  }
+
+  static async delete<T> (this: Constructor<T>, id: string): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const $this = (this as any)
+    return deleteDocument(id, $this.documentName)
   }
 }

@@ -23,6 +23,7 @@
           :loading="checkingName"
           @blur="checkName"
           :autofocus="!editMode"
+          lazy-rules
           :readonly="editMode"
           :rules="[
             val => val && val.length > 0 || 'Please type something',

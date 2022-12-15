@@ -14,7 +14,7 @@
 
     <q-table
       ref="tableRef"
-      :loading="loading"
+      :loading="tableLoading"
       v-model:pagination="pagination"
       @request="onRequest"
       :rows="blocks"
@@ -37,8 +37,17 @@
             <q-btn
               :to="{ path: '/admin/block/edit/' + props.row.id }"
               icon="mdi-pencil"
+              text-color="info"
               size="sm"
               title="Edit"
+              dense
+            />
+            <q-btn
+              @click="deleteBlock(props.row.id)"
+              icon="mdi-trash-can"
+              text-color="negative"
+              size="sm"
+              title="Delete"
               dense
             />
           </q-btn-group>
@@ -50,14 +59,16 @@
 </template>
 
 <script setup lang="ts">
-import { limit, orderBy, OrderByDirection } from '@firebase/firestore'
-import { QTable } from 'quasar'
-import BlockModel from 'src/models/BlockModel'
 import { onMounted, ref } from 'vue'
+import { QTable, useQuasar } from 'quasar'
+import { limit, orderBy, OrderByDirection } from '@firebase/firestore'
+import BlockModel from 'src/models/BlockModel'
+
+const { loading, dialog } = useQuasar()
 
 const blocks = ref<BlockModel[]>([])
 
-const loading = ref<boolean>(false)
+const tableLoading = ref<boolean>(false)
 const pagination = ref({
   sortBy: 'name',
   descending: false,
@@ -82,14 +93,14 @@ async function loadBlocks (rowsPerPage = 5, orderByColumn = 'name', direction:Or
   if (orderByColumn) {
     constraints.push(orderBy(orderByColumn, direction))
   }
-  console.log(constraints)
 
   return await BlockModel.getAll(constraints)
 }
 
-async function onRequest (props:any) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+async function onRequest (props: any) {
   const { page, rowsPerPage, sortBy, descending } = props.pagination
-  loading.value = true
+  tableLoading.value = true
 
   // get all rows if "All" (0) is selected
   const fetchCount = rowsPerPage
@@ -111,7 +122,19 @@ async function onRequest (props:any) {
   pagination.value.descending = descending
 
   // ...and turn of loading indicator
-  loading.value = false
+  tableLoading.value = false
+}
+
+function deleteBlock (blockId: string) {
+  dialog({
+    title: 'Are you sure you want to delete this block?',
+    message: 'This action is irreversible.'
+  }).onOk(async () => {
+    loading.show()
+    await BlockModel.delete(blockId)
+    loading.hide()
+    tableRef.value?.requestServerInteraction()
+  })
 }
 
 onMounted(() => {

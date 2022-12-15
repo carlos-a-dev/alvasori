@@ -1,5 +1,5 @@
 import { getApp } from 'src/composables/firebase/use-firebase'
-import { getFirestore, doc, getDoc, setDoc, Firestore, DocumentData, FirestoreDataConverter, addDoc, collection, query, QueryConstraint, getDocs } from 'firebase/firestore'
+import { getFirestore, doc, getDoc, setDoc, Firestore, DocumentData, FirestoreDataConverter, addDoc, collection, query, QueryConstraint, getDocs, deleteDoc } from 'firebase/firestore'
 
 export * from 'firebase/firestore'
 export { isAppInitialized } from 'src/composables/firebase/use-firebase'
@@ -67,4 +67,13 @@ export async function getDocuments<T = DocumentData> (
   return converter === null
     ? getDocs(query(collection(getFs(appName), mycollection), ...queryConstraints))
     : getDocs(query(collection(getFs(appName), mycollection).withConverter(converter), ...queryConstraints))
+}
+
+// DELETE
+export async function deleteDocument (
+  id: string,
+  mycollection: string,
+  appName = '[DEFAULT]'
+): Promise<void> {
+  return deleteDoc(doc(getFs(appName), mycollection, id))
 }

@@ -34,7 +34,7 @@ export default class BlockModel extends BaseModel implements BlockInterface {
   }
 
   static async isNameAvailable (name:string): Promise<boolean> {
-    return (await BlockModel.getAll([where('name', '==', name), limit(1)])).length > 0
+    return (await BlockModel.getAll([where('name', '==', name), limit(1)])).length === 0
   }
 
   asString () {
