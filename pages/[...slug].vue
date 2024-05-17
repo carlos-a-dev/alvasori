@@ -14,10 +14,7 @@
         </v-card-item>
         <v-divider />
         <v-card-text class="text-justify">
-          <ContentRenderer
-            :value="doc"
-            class="pt-4"
-          />
+          <ContentRenderer :value="doc" />
         </v-card-text>
       </v-card>
     </ContentDoc>

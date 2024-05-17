@@ -1,14 +1,13 @@
 <template>
-  <v-btn
+  <NuxtLink
     :href="href"
     :target="target"
-    variant="plain"
   >
     <ContentSlot
       :use="$slots.default"
       unwrap="p"
     />
-  </v-btn>
+  </NuxtLink>
 </template>
 
 <script setup lang="ts">

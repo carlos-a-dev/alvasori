@@ -11,5 +11,10 @@ export default defineNuxtConfig({
       theme: 'material-theme-palenight',
     },
   },
+  vuetify: {
+    vuetifyOptions: {
+      components: ['VBtn', 'VCard'],
+    },
+  },
   modules: ['@nuxt/content', '@nuxt/eslint', 'vuetify-nuxt-module'],
 })
