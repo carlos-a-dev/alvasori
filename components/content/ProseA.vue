@@ -1,12 +1,14 @@
 <template>
-  <ULink
-    :to="href"
+  <v-btn
+    :href="href"
     :target="target"
-    active-class="text-primary"
-    inactive-class="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200"
+    variant="plain"
   >
-    <slot />
-  </ULink>
+    <ContentSlot
+      :use="$slots.default"
+      unwrap="p"
+    />
+  </v-btn>
 </template>
 
 <script setup lang="ts">

@@ -1,10 +1,37 @@
 <template>
-  <div>
-    <header class="top-0 sticky bg-background/75 backdrop-blur border-b border-gray-200 dark:border-gray-800">
-      <navigation-bar />
-    </header>
-    <main class="min-h-[calc(100vh-var(--header-height))]">
+  <v-app id="alvasori">
+    <nav-header />
+    <v-main class="fill-height">
       <slot />
-    </main>
-  </div>
+    </v-main>
+
+    <v-footer
+      class="text-red-darken-3 d-flex flex-column"
+    >
+      <div>
+        <v-btn
+          v-for="icon in icons"
+          :key="icon"
+          :icon="icon"
+          class="mx-4"
+          variant="text"
+        />
+      </div>
+
+      <v-divider />
+
+      <div>
+        {{ new Date().getFullYear() }} — <strong>AlvaSori</strong>
+      </div>
+    </v-footer>
+  </v-app>
 </template>
+
+<script setup lang="ts">
+const icons = [
+  'mdi-facebook',
+  'mdi-twitter',
+  'mdi-linkedin',
+  'mdi-instagram',
+]
+</script>

@@ -1,13 +1,15 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  colorMode: {
-    preference: 'light',
-  },
   eslint: {
     config: {
       stylistic: true,
     },
   },
-  modules: ['@nuxt/content', '@nuxt/ui', '@nuxt/eslint'],
+  content: {
+    highlight: {
+      theme: 'material-theme-palenight',
+    },
+  },
+  modules: ['@nuxt/content', '@nuxt/eslint', 'vuetify-nuxt-module'],
 })
