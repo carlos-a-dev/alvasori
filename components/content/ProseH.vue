@@ -10,6 +10,7 @@ defineProps<{
     :is="tag"
     :id="id"
     :class="'text-' + tag"
+    class="mt-4 mb-2"
   >
     <slot />
   </component>
