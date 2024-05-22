@@ -28,15 +28,11 @@ jobs:
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+          VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
+          VPS_USER: ${{ vars.VPS_USER }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -H ${{ vars.VPS_IP_ADDRESS }} >> ~/.ssh/known_hosts
-          rsync -avz --delete-after .output/public/ ${{ vars.VPS_USER }}@${{ vars.VPS_IP_ADDRESS }}:/var/www/html
-
-#      - name: Restart Server
-#        env:
-#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-#        run: |
-#          ssh -i ~/.ssh/id_rsa ${{ vars.VPS_USER }}@${{ vars.VPS_IP_ADDRESS }} 'pm2 restart your-app'  # or any command to restart your app
+          echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+          rsync -avz --delete-after .output/public/ $VPS_USER@$VPS_IP_ADDRESS:/var/www/html
