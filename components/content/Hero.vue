@@ -17,6 +17,7 @@ defineProps({
     :height="height"
     hide-delimiter-background
     show-arrows="hover"
+    cycle
   >
     <v-carousel-item
       v-for="imgSrc in src"

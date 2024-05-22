@@ -1,8 +1,9 @@
 <template>
   <v-app-bar
-    flat
     v-scroll="onScroll"
-    :class="{ 'opacity-90': transparent }"
+    flat
+    class="my-nav"
+    :class="{ 'my-nav-transparent': transparent }"
   >
     <v-container class="mx-auto d-flex align-center justify-center">
       <v-avatar
@@ -38,7 +39,20 @@ const links = [
 
 const transparent = ref(true)
 
-function onScroll() {
+const onScroll = debounce(() => {
   transparent.value !== (window.scrollY <= 5) && (transparent.value = !transparent.value)
-}
+}, 100)
 </script>
+
+<style scoped>
+.my-nav {
+  opacity: 1;
+  -webkit-transition: opacity 0.5s ease-in-out;
+  -moz-transition: opacity 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.my-nav-transparent {
+  opacity: 0.9!important;
+}
+</style>

@@ -13,20 +13,30 @@ title: AlvaSori
 
 ::v-card{flat :rounded="false" .text-center .pa-5}
 #title
+  ::v-container{.text-wrap .pa-0}
   ### E-commerce Services
-#text
-  ::div{.text-body-1}
-  Our e-commerce services are crafted to help you establish and grow your online presence efficiently. Our web software development team leverages cutting-edge technologies to create custom solutions tailored to your needs.
   ::
-  :v-btn{text="Request a Quote" flat large color="primary" .mt-4}  
+#text
+  ::v-container{.text-body-1 .pa-0}
+    Our e-commerce services are crafted to help you establish and grow your online presence efficiently. Our web software development team leverages cutting-edge technologies to create custom solutions tailored to your needs.
+  ::
+#actions
+  ::v-container{.pa-0}
+    :v-btn{text="Request a Quote" variant="flat" size="x-large" color="primary"}
+  ::
 ::
 
 ::v-card{flat :rounded="false" .text-center .bg-grey-darken-4 .pa-5}
 #title
+  ::v-container{.text-wrap .pa-0}
   ### Financial Education
-#text
-  ::div{.text-body-1}
-  Our financial education programs are designed to demystify complex financial concepts, making them accessible and actionable.
   ::
-  :v-btn{text="Request a Quote" flat large color="secondary" .mt-4}  
+#text
+  ::v-container{.text-body-1 .pa-0}
+    Our financial education programs are designed to demystify complex financial concepts, making them accessible and actionable.
+  ::
+#actions
+  ::v-container
+    :v-btn{text="Request a Quote" variant="flat" size="x-large" color="secondary"}
+  ::
 ::

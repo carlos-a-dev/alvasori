@@ -13,7 +13,7 @@ export default defineNuxtConfig({
   },
   vuetify: {
     vuetifyOptions: {
-      components: ['VBtn', 'VCard'],
+      components: ['VBtn', 'VCard', 'VContainer'],
     },
   },
   modules: ['@nuxt/content', '@nuxt/eslint', 'vuetify-nuxt-module'],
