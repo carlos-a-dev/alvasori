@@ -1,0 +1,42 @@
+name: Deploy Nuxt.js App
+
+on:
+  push:
+    branches:
+      - main  # or the branch you want to deploy from
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'  # specify the Node.js version you need
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Nuxt.js app
+        run: npm run generate
+
+      - name: Deploy to VPS
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ variables.VPS_IP_ADDRESS }} >> ~/.ssh/known_hosts
+          rsync -avz --delete-after .output/public/ ${{ variables.VPS_USER }}@${{ variables.VPS_IP_ADDRESS }}:/var/www/html
+
+#      - name: Restart Server
+#        env:
+#          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+#        run: |
+#          ssh -i ~/.ssh/id_rsa ${{ variables.VPS_USER }}@${{ variables.VPS_IP_ADDRESS }} 'pm2 restart your-app'  # or any command to restart your app
