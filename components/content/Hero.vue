@@ -35,7 +35,7 @@ defineProps({
             </h1>
 
             <p class="text-h4 text-grey-lighten-1">
-              Expert financial education, innovative web solutions, and comprehensive e-commerce services.
+              Expert financial education, innovative web solutions, and comprehensive E-Commerce services.
             </p>
           </template>
         </v-card>
