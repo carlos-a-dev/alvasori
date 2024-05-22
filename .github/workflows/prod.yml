@@ -31,9 +31,10 @@ jobs:
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_USER: ${{ vars.VPS_USER }}
+          VPS_PATH: ${{ vars.VPS_PATH }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-          rsync -avz --delete-after .output/public/ $VPS_USER@$VPS_IP_ADDRESS:/var/www/html
+          rsync -avz --delete-after .output/public/ $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
