@@ -139,7 +139,7 @@ function resetForm() {
 
         <v-btn
           text="Reset"
-          color="warning"
+          color="secondary"
           size="large"
           :disabled="loading"
           @click.prevent="resetForm()"
