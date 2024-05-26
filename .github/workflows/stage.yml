@@ -46,5 +46,4 @@ jobs:
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
           VPS_USER: ${{ vars.VPS_USER }}
-        run: |
-          ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "$(echo 'cd $VPS_PATH') && pm2 reload ecosystem.config.cjs --env stage"'
+        run: ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "$(echo 'cd $VPS_PATH') && pm2 reload ecosystem.config.cjs --env stage"'
