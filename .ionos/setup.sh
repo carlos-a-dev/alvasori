@@ -1,5 +1,7 @@
 # create nginx user
 adduser -m nginx
+# makes bash the shell by default
+usermod -s /bin/bash nginx
 
 cd /home/nginx
 
