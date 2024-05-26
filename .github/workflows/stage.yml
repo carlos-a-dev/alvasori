@@ -43,5 +43,9 @@ jobs:
 
       - name: Restart App
         env:
+          VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
-        run: pm2 start --name alvasori-stage $VPS_PATH/server/index.mjs
+          VPS_USER: ${{ vars.VPS_USER }}
+        run: |
+          ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lic "pm2 delete alvasori-stage || true"'
+          ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lic "pm2 start --name alvasori-stage $VPS_PATH/server/index.mjs"'
