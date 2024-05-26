@@ -9,7 +9,7 @@
       <v-avatar
         class="me-4 "
         size="48"
-        image="/Logo.png"
+        image="/Logo.webp"
         :rounded="false"
       />
 
