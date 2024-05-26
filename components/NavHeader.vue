@@ -4,6 +4,7 @@
     flat
     class="my-nav"
     :class="{ 'my-nav-transparent': transparent }"
+    color="grey-darken-4"
   >
     <v-container class="mx-auto d-flex align-center justify-center">
       <v-avatar
@@ -22,6 +23,7 @@
         :key="index"
         :text="link.label"
         :to="link.to"
+        rounded
         variant="text"
       />
 
@@ -46,13 +48,13 @@ const onScroll = debounce(() => {
 
 <style scoped>
 .my-nav {
-  opacity: 1;
-  -webkit-transition: opacity 0.5s ease-in-out;
-  -moz-transition: opacity 0.5s ease-in-out;
-  transition: opacity 0.5s ease-in-out;
+  opacity: 0.95;
+  -webkit-transition: opacity 0.2s ease-in-out;
+  -moz-transition: opacity 0.2s ease-in-out;
+  transition: opacity 0.2s ease-in-out;
 }
 
 .my-nav-transparent {
-  opacity: 0.9!important;
+  opacity: 0.7!important;
 }
 </style>

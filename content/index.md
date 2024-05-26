@@ -22,7 +22,7 @@ title: AlvaSori
   ]'
 }
 
-::v-card{flat :rounded="false" .text-center .pa-5}
+::v-card{flat :rounded="false" .text-center .px-0 .px-sm-5 .py-10}
 #title
   ::v-container{.text-wrap .pa-0}
   ### E-commerce Services
@@ -33,11 +33,11 @@ title: AlvaSori
   ::
 #actions
   ::v-container{.pa-0}
-    :v-btn{text="Request a Quote" variant="flat" size="x-large" color="primary"}
+    :v-btn{text="Request a Quote" variant="flat" rounded class="px-4" size="x-large" color="primary"}
   ::
 ::
 
-::v-card{flat :rounded="false" .text-center .bg-grey-darken-4 .pa-5}
+::v-card{flat :rounded="false" .text-center .bg-grey-darken-4 .px-0 .px-sm-5 .py-10}
 #title
   ::v-container{.text-wrap .pa-0}
   ### Financial Education
@@ -48,6 +48,6 @@ title: AlvaSori
   ::
 #actions
   ::v-container
-    :v-btn{text="Request a Quote" variant="flat" size="x-large" color="secondary"}
+    :v-btn{text="Request a Quote" variant="flat" rounded class="px-4" size="x-large" color="secondary"}
   ::
 ::

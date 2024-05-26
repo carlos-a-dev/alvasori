@@ -24,6 +24,7 @@ defineProps({
     hide-delimiter-background
     show-arrows="hover"
     cycle
+    theme="dark"
   >
     <v-carousel-item
       v-for="(slide, index) in slides"
@@ -31,13 +32,16 @@ defineProps({
       :src="slide.src"
       cover
     >
-      <v-container class="d-flex justify-center align-center h-100">
+      <v-container
+        v-if="slide.title || slide.subtitle"
+        class="d-flex justify-center align-center h-100"
+      >
         <v-card
           color="grey-darken-4"
-          class="text-center opacity-70"
+          class="text-center opacity-70 rounded-lg"
+          round
         >
           <template
-            v-if="slide.title || slide.subtitle"
             #text
           >
             <h1 class="text-h2 text-white">
