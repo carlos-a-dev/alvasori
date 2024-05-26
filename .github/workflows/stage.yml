@@ -39,7 +39,7 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-          rsync -avz --delete-after .output/ $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
+          rsync -avz . $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
 
       - name: Restart App
         env:
@@ -47,5 +47,4 @@ jobs:
           VPS_PATH: ${{ vars.VPS_PATH }}
           VPS_USER: ${{ vars.VPS_USER }}
         run: |
-          ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "pm2 delete alvasori-stage || true"'
-          ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "$(echo 'pm2 start --name alvasori-stage $VPS_PATH/server/index.mjs')"'
+          ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "$(echo 'pm2 reload $VPS_PATH/ecosystem.config.cjs --env stage')"'
