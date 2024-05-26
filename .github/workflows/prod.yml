@@ -25,7 +25,7 @@ jobs:
         run: yarn
 
       - name: Build Nuxt.js app
-        run: yarn generate
+        run: yarn build
 
       - name: Deploy to VPS
         env:
