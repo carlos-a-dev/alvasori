@@ -2,12 +2,23 @@
 title: AlvaSori
 ---
 
-:hero{
+:carousel{
   height="100vh"
-  :src='[
-    "https://images.pexels.com/photos/3182773/pexels-photo-3182773.jpeg",
-    "https://images.pexels.com/photos/14751157/pexels-photo-14751157.jpeg",
-    "https://images.pexels.com/photos/9242822/pexels-photo-9242822.jpeg"
+  :slides='[
+    {
+      "src": "/media/hero_1.webp",
+      "title": "Empowering Your Business with Education and Technology",
+      "subtitle": "Expert financial education, innovative web solutions, and comprehensive E-Commerce services."
+    },
+    {
+      "src": "/media/hero_2.webp",
+      "title": "Demystify complex financial concepts."
+    },
+    {
+      "src": "/media/hero_3.webp",
+      "title": "Our Vision",
+      "subtitle": "We envision a world where everyone has access to the financial education and technological resources they need to achieve their goals."
+    }
   ]'
 }
 

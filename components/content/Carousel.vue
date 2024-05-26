@@ -1,7 +1,13 @@
 <script setup lang="ts">
+interface ISlide {
+  src: string
+  title?: string
+  subtitle?: string
+}
+
 defineProps({
-  src: {
-    type: Array as PropType<string[]>,
+  slides: {
+    type: Array as PropType<ISlide[]>,
     default: () => [],
   },
   height: {
@@ -20,9 +26,9 @@ defineProps({
     cycle
   >
     <v-carousel-item
-      v-for="imgSrc in src"
-      :key="imgSrc"
-      :src="imgSrc"
+      v-for="(slide, index) in slides"
+      :key="index"
+      :src="slide.src"
       cover
     >
       <v-container class="d-flex justify-center align-center h-100">
@@ -30,13 +36,16 @@ defineProps({
           color="grey-darken-4"
           class="text-center opacity-70"
         >
-          <template #text>
+          <template
+            v-if="slide.title || slide.subtitle"
+            #text
+          >
             <h1 class="text-h2 text-white">
-              Empowering Your Business with Education and Technology
+              {{ slide.title }}
             </h1>
 
             <p class="text-h4 text-grey-lighten-1">
-              Expert financial education, innovative web solutions, and comprehensive E-Commerce services.
+              {{ slide.subtitle }}
             </p>
           </template>
         </v-card>
