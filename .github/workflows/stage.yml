@@ -25,7 +25,7 @@ jobs:
         run: yarn
 
       - name: Build Nuxt.js app
-        run: yarn generate
+        run: yarn build
 
       - name: Deploy to VPS
         env:
@@ -39,4 +39,9 @@ jobs:
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-          rsync -avz --delete-after .output/public/ $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
+          rsync -avz --delete-after .output/ $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
+
+      - name: Restart App
+        env:
+          VPS_PATH: ${{ vars.VPS_PATH }}
+        run: pm2 start --name alvasori-stage $VPS_PATH/server/index.mjs
