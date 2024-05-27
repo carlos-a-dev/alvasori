@@ -25,15 +25,27 @@ const initialAlertState: IAlertState = {
 }
 const alert = reactive<IAlertState>({ ...initialAlertState })
 
-function onSubmit() {
+async function onSubmit() {
   loading.value = true
-  setTimeout(() => {
-    loading.value = false
-    resetForm()
-    alert.type = 'success'
-    alert.text = 'Success!'
-    alert.show = true
-  }, 2000)
+
+  const data = await $fetch('/api/contact', {
+    method: 'POST',
+    body: {
+      firstName: firstName.value,
+      lastName: lastName.value,
+      email: email.value,
+      message: message.value,
+    },
+  })
+  console.log(data)
+
+  // setTimeout(() => {
+  loading.value = false
+  resetForm()
+  alert.type = 'success'
+  alert.text = 'Success!'
+  alert.show = true
+  // }, 2000)
 }
 
 function resetForm() {
