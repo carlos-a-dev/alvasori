@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useAuthStore } from '~/stores/auth'
 
-definePageMeta({
-  layout: 'login',
-})
+setPageLayout('login')
+
+// definePageMeta({
+//   layout: 'login',
+// })
 
 const authStore = useAuthStore()
 const { authenticated } = storeToRefs(authStore)

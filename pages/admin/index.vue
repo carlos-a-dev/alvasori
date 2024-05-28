@@ -1,8 +1,5 @@
 <template>
-  <v-container
-    align-content-center
-    class="fill-height"
-  >
+  <v-container>
     <h1>Hello Admin</h1>
   </v-container>
 </template>
