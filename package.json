@@ -16,6 +16,7 @@
     "vuetify-nuxt-module": "^0.14.0"
   },
   "devDependencies": {
+    "@pinia/nuxt": "^0.5.1",
     "eslint": "^9.2.0",
     "typescript": "^5.4.5"
   }

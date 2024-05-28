@@ -1,14 +1,20 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
-  eslint: {
-    config: {
-      stylistic: true,
-    },
-  },
+  modules: [
+    '@nuxt/content',
+    '@nuxt/eslint',
+    '@pinia/nuxt',
+    'vuetify-nuxt-module',
+  ],
   content: {
     highlight: {
       theme: 'material-theme-palenight',
+    },
+  },
+  eslint: {
+    config: {
+      stylistic: true,
     },
   },
   vuetify: {
@@ -16,5 +22,8 @@ export default defineNuxtConfig({
       components: ['VBtn', 'VCard', 'VContainer'],
     },
   },
-  modules: ['@nuxt/content', '@nuxt/eslint', 'vuetify-nuxt-module'],
+  routeRules: {
+    '/admin': { ssr: false },
+    '/admin/**': { ssr: false },
+  },
 })

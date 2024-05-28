@@ -1,3 +1,9 @@
+<script setup lang="ts">
+definePageMeta({
+  layout: 'markdown',
+})
+</script>
+
 <template>
   <v-container class="px-0 px-sm-4">
     <ContentDoc v-slot="{ doc }">
@@ -29,9 +35,3 @@
     </ContentDoc>
   </v-container>
 </template>
-
-<script setup lang="ts">
-definePageMeta({
-  layout: 'markdown',
-})
-</script>
