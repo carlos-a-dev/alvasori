@@ -1,21 +1,40 @@
 <script setup lang="ts">
 setPageLayout('login')
 
+const form = ref<HTMLFormElement | null>(null)
+const usernameInput = ref<HTMLInputElement | null>(null)
+
 const valid = ref(false)
-const username = ref('')
-const password = ref('')
+
+const alert = reactive<{
+  show: boolean
+  type?: 'info' | 'error' | 'success' | 'warning'
+  message: string
+}>({
+  show: false,
+  type: 'info',
+  message: '',
+})
+
+const payload = reactive({
+  username: '',
+  password: '',
+})
 
 async function onSubmit() {
   const result = await useFetch('/api/auth/login', {
     method: 'POST',
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value,
-    }),
+    body: JSON.stringify(payload),
   })
 
   if (result.error.value) {
-    return window.alert('wrong username or password.')
+    alert.type = 'error'
+    alert.message = result.error.value.data?.message || 'There is an error with your request.'
+    alert.show = true
+
+    form.value?.reset()
+    usernameInput.value?.focus()
+    return
   }
 
   await navigateTo('/admin')
@@ -41,13 +60,21 @@ async function onSubmit() {
       @submit.prevent="onSubmit"
     >
       <v-card-text class="bg-primary-lighten-1">
+        <v-alert
+          v-model="alert.show"
+          :type="alert.type"
+          closable
+          :text="alert.message"
+        />
         <v-container>
           <v-row>
             <v-col
               cols="12"
             >
               <v-text-field
-                v-model="username"
+                ref="usernameInput"
+                v-model="payload.username"
+                autofocus
                 label="Username"
                 variant="solo"
                 :rules="[vRequired]"
@@ -59,7 +86,7 @@ async function onSubmit() {
               cols="12"
             >
               <v-text-field
-                v-model="password"
+                v-model="payload.password"
                 label="Password"
                 type="password"
                 variant="solo"

@@ -2,24 +2,35 @@
 setPageLayout('login')
 
 const valid = ref(false)
-const username = ref('')
-const password = ref('')
-const email = ref('')
+const alert = reactive<{
+  show: boolean
+  type?: 'info' | 'error' | 'success' | 'warning'
+  message: string
+}>({
+  show: false,
+  type: 'info',
+  message: '',
+})
+
+const payload = reactive({
+  username: '',
+  password: '',
+  email: '',
+})
 
 async function onSubmit() {
   const result = await useFetch('/api/auth/signup', {
     method: 'POST',
-    body: JSON.stringify({
-      username: username.value,
-      password: password.value,
-      email: email.value,
-    }),
+    body: JSON.stringify(payload),
   })
 
   if (result.error.value) {
-    window.alert('error: ' + JSON.stringify(result))
-    return false
+    alert.type = 'error'
+    alert.message = result.error.value.data?.message || 'There is an error with your request.'
+    alert.show = true
+    return
   }
+
   await navigateTo('/admin')
 }
 </script>
@@ -43,16 +54,22 @@ async function onSubmit() {
       @submit.prevent="onSubmit"
     >
       <v-card-text class="bg-primary-lighten-1">
+        <v-alert
+          v-model="alert.show"
+          :type="alert.type"
+          closable
+          :text="alert.message"
+        />
         <v-container>
           <v-row>
             <v-col
               cols="12"
             >
               <v-text-field
-                v-model="email"
+                v-model="payload.email"
                 label="email"
                 variant="solo"
-                :rules="[vRequired, v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid']"
+                :rules="[vRequired, vEmail]"
               />
             </v-col>
           </v-row>
@@ -61,7 +78,7 @@ async function onSubmit() {
               cols="12"
             >
               <v-text-field
-                v-model="username"
+                v-model="payload.username"
                 label="Username"
                 variant="solo"
                 :rules="[vRequired]"
@@ -73,7 +90,7 @@ async function onSubmit() {
               cols="12"
             >
               <v-text-field
-                v-model="password"
+                v-model="payload.password"
                 label="Password"
                 type="password"
                 variant="solo"
