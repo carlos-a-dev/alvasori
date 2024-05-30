@@ -4,20 +4,22 @@ setPageLayout('login')
 const valid = ref(false)
 const username = ref('')
 const password = ref('')
+const email = ref('')
 
 async function onSubmit() {
-  const result = await useFetch('/api/auth/login', {
+  const result = await useFetch('/api/auth/signup', {
     method: 'POST',
     body: JSON.stringify({
       username: username.value,
       password: password.value,
+      email: email.value,
     }),
   })
 
   if (result.error.value) {
-    return window.alert('wrong username or password.')
+    window.alert('error: ' + JSON.stringify(result))
+    return false
   }
-
   await navigateTo('/admin')
 }
 </script>
@@ -42,6 +44,18 @@ async function onSubmit() {
     >
       <v-card-text class="bg-primary-lighten-1">
         <v-container>
+          <v-row>
+            <v-col
+              cols="12"
+            >
+              <v-text-field
+                v-model="email"
+                label="email"
+                variant="solo"
+                :rules="[vRequired, v => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'E-mail must be valid']"
+              />
+            </v-col>
+          </v-row>
           <v-row>
             <v-col
               cols="12"
@@ -78,7 +92,7 @@ async function onSubmit() {
           type="submit"
           :disabled="!valid"
         >
-          Log In
+          Sign Up
         </v-btn>
         <v-spacer />
       </v-card-actions>

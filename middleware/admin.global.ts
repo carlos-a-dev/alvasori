@@ -1,20 +1,22 @@
-import { useAuthStore } from '~/stores/auth'
-
 // middleware/adminAuth.ts
-export default defineNuxtRouteMiddleware((to) => {
-  if (import.meta.server) return
+export default defineNuxtRouteMiddleware(async (to) => {
   if (!to.path.startsWith('/admin')) return
 
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
+  const { data: user } = await useFetch('/api/auth/user')
 
-  if (!authStore.authenticated && to.path !== '/admin/login') {
-    return navigateTo('/admin/login')
+  if (!user.value) {
+    if (to.path !== '/admin/login') {
+      return await navigateTo('/admin/login')
+    }
+    else { return }
   }
 
-  if (authStore.authenticated && to.path === '/admin/login') {
-    return navigateTo('/admin')
+  if (user.value && to.path === '/admin/login') {
+    return await navigateTo('/admin')
   }
+
+  const authenticatedUser = useUser()
+  authenticatedUser.value = user.value
 
   setPageLayout('admin')
 })

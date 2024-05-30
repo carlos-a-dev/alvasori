@@ -1,9 +1,12 @@
 <script setup lang="ts">
-const authStore = useAuthStore()
+const user = useAuthenticatedUser()
 
-function onLogOutClick() {
-  authStore.logUserOut()
-  navigateTo('/admin/login')
+async function logout() {
+  await useFetch('/api/auth/logout', {
+    method: 'POST',
+  })
+
+  await navigateTo('/admin/login')
 }
 </script>
 
@@ -22,10 +25,11 @@ function onLogOutClick() {
       </v-app-bar-title>
 
       <template #append>
+        <span>{{ user.id }}</span>
         <v-btn
           icon="mdi-logout"
           title="Log Out"
-          @click="onLogOutClick()"
+          @click="logout()"
         />
       </template>
     </v-app-bar>
