@@ -1,6 +1,8 @@
 <script setup lang="ts">
 const user = useAuthenticatedUser()
 
+const drawerOpen = ref(false)
+
 async function logout() {
   await useFetch('/api/auth/logout', {
     method: 'POST',
@@ -11,13 +13,15 @@ async function logout() {
 </script>
 
 <template>
-  <v-app id="alvasori">
+  <v-layout>
     <v-app-bar
       :elevation="1"
       rounded
     >
       <template #prepend>
-        <v-app-bar-nav-icon />
+        <v-app-bar-nav-icon
+          @click="drawerOpen = !drawerOpen"
+        />
       </template>
 
       <v-app-bar-title class="text-h4 font-weight-bold">
@@ -33,8 +37,15 @@ async function logout() {
         />
       </template>
     </v-app-bar>
+
+    <v-navigation-drawer v-model="drawerOpen">
+      <v-list>
+        <v-list-item title="Navigation drawer" />
+      </v-list>
+    </v-navigation-drawer>
+
     <v-main class="fill-height">
       <slot />
     </v-main>
-  </v-app>
+  </v-layout>
 </template>
