@@ -3,17 +3,22 @@ const { data: users } = useAsyncData('users', () => $fetch('/api/user'))
 </script>
 
 <template>
-  <v-container grid-list-xs>
-    <v-card>
-      <v-card-title primary-title>
-        <div>
-          <h3 class="headline">
-            Users
-          </h3>
-        </div>
-      </v-card-title>
+  <v-container>
+    <v-card title="Users">
+      <template #title>
+        Users
+      </template>
 
-      <v-card-text>
+      <template #append>
+        <v-btn
+          v-tooltip="'New User'"
+          icon="mdi-plus"
+          variant="flat"
+          href="/admin/user/new"
+        />
+      </template>
+
+      <template #text>
         <v-table>
           <thead>
             <tr>
@@ -35,14 +40,15 @@ const { data: users } = useAsyncData('users', () => $fetch('/api/user'))
               <td>{{ user.username }}</td>
               <td>{{ user.email }}</td>
               <td>{{ user.name }}</td>
-              <td>{{ user.createdAt }}</td>
-              <td>{{ user.updatedAt }}</td>
+              <td>{{ formatDate(user.createdAt) }}</td>
+              <td>{{ user.updatedAt ? formatDate(user.updatedAt) : '-' }}</td>
               <td>
                 <v-btn
                   class="text-blue-darken-3"
                   variant="flat"
                   size="xs"
                   icon="mdi-pencil"
+                  :href="`/admin/user/${user.id}`"
                 />
                 <v-btn
                   class="text-red-darken-4"
@@ -54,7 +60,7 @@ const { data: users } = useAsyncData('users', () => $fetch('/api/user'))
             </tr>
           </tbody>
         </v-table>
-      </v-card-text>
+      </template>
     </v-card>
   </v-container>
 </template>

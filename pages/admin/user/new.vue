@@ -1,29 +1,21 @@
 <script setup lang="ts">
+import type { User } from '@prisma/client'
+
 const valid = ref(false)
 const loading = ref(false)
 const form = ref<HTMLFormElement | null>(null)
+const showPassword = ref(false)
 
-const userId = useRoute().params.userId
-
-const { data, error } = await useAsyncData(`user/${userId}`, () => $fetch(`/api/user/${userId}`))
-
-if (data.value === null || data.value === undefined) {
-  navigateTo('/admin/user')
-  throw createError({
-    statusMessage: error.value?.message ?? 'User not found.',
-    statusCode: error.value?.statusCode ?? 404,
-  })
-}
-const user = reactive(data.value)
+const user = reactive<Partial<User>>({})
 
 async function onSubmit() {
   loading.value = true
-  await $fetch(`/api/user/${userId}`, {
-    method: 'PUT',
+  const newUser = await $fetch('/api/user', {
+    method: 'POST',
     body: JSON.stringify(user),
   })
   loading.value = false
-  navigateTo('/admin/user')
+  navigateTo(`/admin/user/${newUser.id}`)
 }
 </script>
 
@@ -53,7 +45,7 @@ async function onSubmit() {
       </template>
 
       <template #title>
-        Edit User
+        New User
       </template>
 
       <template #text>
@@ -83,6 +75,16 @@ async function onSubmit() {
               label="Username"
               :rules="[vRequired]"
               required
+            />
+
+            <v-text-field
+              v-model="user.password"
+              label="Password"
+              :rules="[vRequired]"
+              :type="showPassword ? 'text' : 'password'"
+              :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+              required
+              @click:append-inner="showPassword = !showPassword"
             />
           </v-container>
         </v-form>
