@@ -45,6 +45,7 @@ async function logout() {
     </v-navigation-drawer>
 
     <v-main class="fill-height">
+      <app-alerts />
       <slot />
     </v-main>
   </v-layout>

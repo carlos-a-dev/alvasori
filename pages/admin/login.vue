@@ -3,18 +3,11 @@ setPageLayout('login')
 
 const form = ref<HTMLFormElement | null>(null)
 const usernameInput = ref<HTMLInputElement | null>(null)
-
 const valid = ref(false)
+const loading = ref(false)
+const showPassword = ref(false)
 
-const alert = reactive<{
-  show: boolean
-  type?: 'info' | 'error' | 'success' | 'warning'
-  message: string
-}>({
-  show: false,
-  type: 'info',
-  message: '',
-})
+const { sendAlert } = useAlertStore()
 
 const payload = reactive({
   username: '',
@@ -22,15 +15,18 @@ const payload = reactive({
 })
 
 async function onSubmit() {
+  loading.value = true
   const result = await useFetch('/api/auth/login', {
     method: 'POST',
     body: JSON.stringify(payload),
   })
+  loading.value = false
 
   if (result.error.value) {
-    alert.type = 'error'
-    alert.message = result.error.value.data?.message || 'There is an error with your request.'
-    alert.show = true
+    sendAlert({
+      type: 'error',
+      text: result.error.value.data?.message || 'There is an error with your request.',
+    })
 
     form.value?.reset()
     usernameInput.value?.focus()
@@ -42,30 +38,25 @@ async function onSubmit() {
 </script>
 
 <template>
-  <v-card width="450px">
-    <v-card-title
-      primary-title
-      class="bg-primary-darken-1"
-    >
-      <div>
-        <h3 class="headline mb-0">
-          AlvaSori
-        </h3>
-        <div>Login</div>
-      </div>
-    </v-card-title>
-    <v-form
-      ref="form"
-      v-model="valid"
-      @submit.prevent="onSubmit"
-    >
-      <v-card-text class="bg-primary-lighten-1">
-        <v-alert
-          v-model="alert.show"
-          :type="alert.type"
-          closable
-          :text="alert.message"
-        />
+  <v-card
+    width="450px"
+    :loading="loading"
+    elevation="20"
+  >
+    <template #title>
+      AlvaSori
+    </template>
+    <template #subtitle>
+      Login
+    </template>
+
+    <template #text>
+      <app-alerts />
+      <v-form
+        ref="form"
+        v-model="valid"
+        @submit.prevent="onSubmit"
+      >
         <v-container>
           <v-row>
             <v-col
@@ -76,7 +67,6 @@ async function onSubmit() {
                 v-model="payload.username"
                 autofocus
                 label="Username"
-                variant="solo"
                 :rules="[vRequired]"
               />
             </v-col>
@@ -88,27 +78,30 @@ async function onSubmit() {
               <v-text-field
                 v-model="payload.password"
                 label="Password"
-                type="password"
-                variant="solo"
+                :type="showPassword ? 'text' : 'password'"
+                :append-inner-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
                 :rules="[vRequired]"
+                @click:append-inner="showPassword = !showPassword"
               />
             </v-col>
           </v-row>
+          <v-row>
+            <v-col
+              cols="12"
+            >
+              <v-btn
+                block
+                color="primary"
+                type="submit"
+                :disabled="!valid"
+                :loading="loading"
+              >
+                Log In
+              </v-btn>
+            </v-col>
+          </v-row>
         </v-container>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer />
-        <v-btn
-          flat
-          rounded
-          color="primary"
-          type="submit"
-          :disabled="!valid"
-        >
-          Log In
-        </v-btn>
-        <v-spacer />
-      </v-card-actions>
-    </v-form>
+      </v-form>
+    </template>
   </v-card>
 </template>

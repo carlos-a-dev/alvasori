@@ -20,6 +20,11 @@ export default defineNuxtConfig({
   vuetify: {
     vuetifyOptions: {
       components: ['VBtn', 'VCard', 'VContainer'],
+      defaults: {
+        VBtn: { variant: 'flat', rounded: true },
+        VTextField: { variant: 'outlined', rounded: true },
+        VCard: { variant: 'elevated', rounded: 'xl' },
+      },
     },
   },
   routeRules: {
