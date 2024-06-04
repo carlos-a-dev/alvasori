@@ -51,7 +51,7 @@ async function onSubmit() {
     </template>
 
     <template #text>
-      <app-alerts />
+      <layout-app-alerts />
       <v-form
         ref="form"
         v-model="valid"

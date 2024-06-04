@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
@@ -22,7 +22,8 @@ export default defineNuxtConfig({
       components: ['VBtn', 'VCard', 'VContainer'],
       defaults: {
         VBtn: { variant: 'flat', rounded: true },
-        VTextField: { variant: 'outlined', rounded: true },
+        VTextField: { variant: 'outlined', rounded: true, density: 'comfortable' },
+        VTextarea: { variant: 'outlined', rounded: true, density: 'comfortable' },
         VCard: { variant: 'elevated', rounded: 'xl' },
       },
     },

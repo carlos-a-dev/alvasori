@@ -12,9 +12,7 @@ useHead({
 </script>
 
 <template>
-  <v-app id="alvasori">
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-  </v-app>
+  <NuxtLayout>
+    <NuxtPage />
+  </NuxtLayout>
 </template>

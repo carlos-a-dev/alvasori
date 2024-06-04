@@ -1,14 +1,16 @@
 <template>
   <v-app id="alvasori">
-    <nav-header />
+    <layout-nav-header />
+
     <v-main class="fill-height pt-0">
       <slot />
     </v-main>
 
     <v-footer
+      app
       class="text-red-darken-3 d-flex flex-column"
     >
-      <lazy-social-btns />
+      <lazy-layout-social-btns />
 
       <v-divider />
 

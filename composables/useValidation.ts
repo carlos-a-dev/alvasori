@@ -19,3 +19,15 @@ export const vEmail = (value: string) => {
 
   return true
 }
+
+export const vMaxLength = (maxLength: number) => {
+  return (value: string) => {
+    return value.length <= maxLength || `Input cannot be longer than ${maxLength} characters.`
+  }
+}
+
+export const vMinLength = (minLength: number) => {
+  return (value: string) => {
+    return value.length >= minLength || `Input must be longer than ${minLength} characters.`
+  }
+}

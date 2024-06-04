@@ -15,7 +15,7 @@ async function onSubmit() {
     body: JSON.stringify(user),
   })
   loading.value = false
-  navigateTo(`/admin/user/${newUser.id}`)
+  await navigateTo(`/admin/user/${newUser.id}`)
 }
 </script>
 
@@ -30,7 +30,7 @@ async function onSubmit() {
           v-tooltip="'Back'"
           flat
           icon="mdi-arrow-left"
-          href="/admin/user"
+          to="/admin/user"
         />
       </template>
       <template #append>

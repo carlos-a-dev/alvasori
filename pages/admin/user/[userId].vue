@@ -38,7 +38,7 @@ async function onSubmit() {
           v-tooltip="'Back'"
           flat
           icon="mdi-arrow-left"
-          href="/admin/user"
+          to="/admin/user"
         />
       </template>
       <template #append>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const { data: users } = useAsyncData('users', () => $fetch('/api/user'))
+const { data: users } = await useAsyncData('users', () => $fetch('/api/user'))
 </script>
 
 <template>
@@ -14,7 +14,7 @@ const { data: users } = useAsyncData('users', () => $fetch('/api/user'))
           v-tooltip="'New User'"
           icon="mdi-plus"
           variant="flat"
-          href="/admin/user/new"
+          to="/admin/user/new"
         />
       </template>
 
@@ -48,7 +48,7 @@ const { data: users } = useAsyncData('users', () => $fetch('/api/user'))
                   variant="flat"
                   size="xs"
                   icon="mdi-pencil"
-                  :href="`/admin/user/${user.id}`"
+                  :to="`/admin/user/${user.id}`"
                 />
                 <v-btn
                   class="text-red-darken-4"

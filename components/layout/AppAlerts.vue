@@ -3,15 +3,16 @@ const { alerts, removeAlert } = useAlertStore()
 </script>
 
 <template>
-  <div>
+  <v-expand-transition>
     <v-alert
       v-for="(alert, index) in alerts"
       :key="index"
+      class="fade-transition"
       v-bind="alert"
       density="compact"
       tile
       closable
       @click:close="removeAlert(index)"
     />
-  </div>
+  </v-expand-transition>
 </template>
