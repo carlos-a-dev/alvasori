@@ -19,6 +19,11 @@ const items: ListItem[] = [
     to: '/admin/user',
     prependIcon: 'mdi-head',
   },
+  {
+    title: 'Blocks',
+    to: '/admin/block',
+    prependIcon: 'mdi-toy-brick',
+  },
 ]
 </script>
 

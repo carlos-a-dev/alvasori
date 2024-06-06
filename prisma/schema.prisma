@@ -28,3 +28,12 @@ model Session {
   expiresAt DateTime
   user      User     @relation(references: [id], fields: [userId], onDelete: Cascade)
 }
+
+model Block {
+  id    Int     @id @default(autoincrement())
+  name  String @unique
+  description String?
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime?
+}
