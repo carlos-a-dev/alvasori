@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  devtools: { enabled: false },
+  devtools: { enabled: true },
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
@@ -9,7 +9,8 @@ export default defineNuxtConfig({
   ],
   content: {
     highlight: {
-      theme: 'material-theme-palenight',
+      theme: 'light-plus',
+      langs: ['json', 'js', 'ts', 'html', 'css', 'vue', 'shell', 'mdc', 'md', 'yaml', 'php', 'sql'],
     },
   },
   eslint: {

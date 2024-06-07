@@ -9,6 +9,7 @@
     <v-footer
       app
       class="text-red-darken-3 d-flex flex-column"
+      absolute
     >
       <lazy-layout-social-btns />
 

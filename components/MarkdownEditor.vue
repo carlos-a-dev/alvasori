@@ -1,18 +1,17 @@
 <script setup lang="ts">
-import { MdEditor, NormalToolbar, allToolbar, type ToolbarNames } from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
+import { MdEditor, NormalToolbar, allToolbar, type ToolbarNames } from 'md-editor-v3'
 import markdownParser from '@nuxt/content/transformers/markdown'
 
 const value = defineModel<string>()
-
-const enablePreview = ref(false)
-const preview = ref({})
+const enablePreview = ref(true)
+const preview = ref<Record<string, unknown>>({ body: { type: 'root', children: [] } })
 
 watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
-  if (newEnablePreview && newValue !== undefined && markdownParser.parse !== undefined) {
-    preview.value = await markdownParser.parse('preview.md', newValue, {})
+  if (newEnablePreview && markdownParser.parse !== undefined) {
+    preview.value = await markdownParser.parse('preview.md', newValue ?? '', {})
   }
-})
+}, { immediate: true })
 </script>
 
 <template>
@@ -59,10 +58,12 @@ watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
               sm="6"
             >
               <v-container class="border-thin fill-height align-start px-5 overflow-auto">
-                <ContentRendererMarkdown
-                  :value="preview"
-                  class="w-100"
-                />
+                <ContentRenderer :value="preview">
+                  <ContentRendererMarkdown
+                    :value="preview"
+                    class="w-100"
+                  />
+                </ContentRenderer>
               </v-container>
             </v-col>
           </v-row>
