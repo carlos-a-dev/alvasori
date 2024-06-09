@@ -1,5 +1,6 @@
 ---
 title: AlvaSori
+layout: default
 ---
 
 :carousel{

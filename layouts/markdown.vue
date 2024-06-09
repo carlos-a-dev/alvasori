@@ -4,7 +4,9 @@
 
     <v-main class="fill-height">
       <layout-app-alerts />
-      <slot />
+      <v-container class="fill-height align-start">
+        <slot />
+      </v-container>
     </v-main>
 
     <v-footer
