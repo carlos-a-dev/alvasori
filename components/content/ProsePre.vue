@@ -50,7 +50,6 @@ const copyBtnText = ref('')
 
 async function copyCode() {
   await navigator.clipboard.writeText(props.code)
-  console.log('Here')
   copyBtnText.value = 'Copied!'
   setTimeout(() => {
     copyBtnText.value = ''

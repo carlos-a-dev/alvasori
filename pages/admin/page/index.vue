@@ -1,20 +1,20 @@
 <script setup lang="ts">
-const { data: blocks } = await useAsyncData('blocks', () => $fetch('/api/block'))
+const { data: pages } = await useAsyncData('pages', () => $fetch('/api/page'))
 </script>
 
 <template>
   <v-container>
-    <v-card title="Blocks">
+    <v-card title="Pages">
       <template #title>
-        Blocks
+        Pages
       </template>
 
       <template #append>
         <v-btn
-          v-tooltip="'New block'"
-          icon="mdi-toy-brick-plus"
+          v-tooltip="'New page'"
+          icon="mdi-plus"
           variant="flat"
-          to="/admin/block/new"
+          to="/admin/page/new"
         />
       </template>
 
@@ -23,7 +23,7 @@ const { data: blocks } = await useAsyncData('blocks', () => $fetch('/api/block')
           <thead>
             <tr>
               <th>ID</th>
-              <th>Name</th>
+              <th>Slug</th>
               <th>Description</th>
               <th>Created At</th>
               <th>Updated At</th>
@@ -32,21 +32,21 @@ const { data: blocks } = await useAsyncData('blocks', () => $fetch('/api/block')
           </thead>
           <tbody>
             <tr
-              v-for="block in blocks"
-              :key="block.id"
+              v-for="page in pages"
+              :key="page.id"
             >
-              <td>{{ block.id }}</td>
-              <td>{{ block.name }}</td>
-              <td>{{ block.description }}</td>
-              <td>{{ formatDate(block.createdAt) }}</td>
-              <td>{{ block.updatedAt ? formatDate(block.updatedAt) : '-' }}</td>
+              <td>{{ page.id }}</td>
+              <td>{{ page.slug }}</td>
+              <td>{{ page.description }}</td>
+              <td>{{ formatDate(page.createdAt) }}</td>
+              <td>{{ page.updatedAt ? formatDate(page.updatedAt) : '-' }}</td>
               <td>
                 <v-btn
                   class="text-blue-darken-3"
                   variant="flat"
                   size="xs"
                   icon="mdi-pencil"
-                  :to="`/admin/block/${block.name}`"
+                  :to="`/admin/page/${page.id}`"
                 />
                 <v-btn
                   class="text-red-darken-4"

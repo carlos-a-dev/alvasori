@@ -1,7 +1,7 @@
 import type { InternalApi } from 'nitropack'
 import { FetchError } from 'ofetch'
 
-export type Page = NonNullable<InternalApi['/api/page/**:slug']['get']> | null
+export type Page = NonNullable<InternalApi['/api/page/bySlug/**:slug']['get']> | null
 
 export type PageCollection = { [key: string]: (Page | null) }
 
@@ -18,7 +18,7 @@ export const usePageStore = defineStore('page', () => {
 
     if (pages.value[slug] === undefined) {
       try {
-        const page = await $fetch(`/api/page/${slug}`) ?? null
+        const page = await $fetch(`/api/page/bySlug/${slug}`) ?? null
         pages.value[slug] = page
       }
       catch (err) {

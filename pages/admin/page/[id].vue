@@ -3,27 +3,31 @@ const valid = ref(false)
 const loading = ref(false)
 const form = ref<HTMLFormElement | null>(null)
 
-const blockName = useRoute().params.name
+const route = useRoute()
+const pageId = parseInt(route.params.id as string)
 
-const { data, error } = await useAsyncData(`block/${blockName}`, () => $fetch(`/api/block/${blockName}`))
+const { data, error } = await useAsyncData(`page-edit`, () => $fetch(`/api/page/${pageId}`))
 
 if (data.value === null || data.value === undefined) {
-  navigateTo('/admin/block')
+  navigateTo('/admin/page')
+  errorAlert('Page not found!')
   throw createError({
-    statusMessage: error.value?.message ?? 'Block not found.',
+    statusMessage: error.value?.message ?? 'Page not found.',
     statusCode: error.value?.statusCode ?? 404,
   })
 }
-const block = reactive(data.value)
+
+const page = reactive(data.value)
 
 async function onSubmit() {
   loading.value = true
-  await $fetch(`/api/block/${blockName}`, {
+  await $fetch(`/api/page/${pageId}`, {
     method: 'PUT',
-    body: JSON.stringify(block),
+    body: JSON.stringify(page),
   })
   loading.value = false
-  await navigateTo('/admin/block')
+  successAlert('Success!', { time: 2000 })
+  await navigateTo('/admin/page')
 }
 </script>
 
@@ -38,7 +42,7 @@ async function onSubmit() {
           v-tooltip="'Back'"
           flat
           icon="mdi-arrow-left"
-          to="/admin/block"
+          to="/admin/page"
         />
       </template>
       <template #append>
@@ -53,7 +57,7 @@ async function onSubmit() {
       </template>
 
       <template #title>
-        Edit Block
+        Edit Page
       </template>
 
       <template #text>
@@ -67,19 +71,19 @@ async function onSubmit() {
             grid-list-xs
           >
             <v-text-field
-              v-model="block.name"
-              label="Name"
+              v-model="page.slug"
+              label="Slug"
               :rules="[vRequired]"
               required
             />
             <v-text-field
-              v-model="block.description"
+              v-model="page.description"
               label="Description"
               required
             />
 
             <markdown-editor
-              v-model="block.content"
+              v-model="page.content"
               rounded
               label="Content"
               variant="outlined"

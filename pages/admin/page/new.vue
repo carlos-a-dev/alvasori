@@ -1,29 +1,20 @@
 <script setup lang="ts">
+import type { Page } from '@prisma/client'
+
 const valid = ref(false)
 const loading = ref(false)
 const form = ref<HTMLFormElement | null>(null)
 
-const blockName = useRoute().params.name
-
-const { data, error } = await useAsyncData(`block/${blockName}`, () => $fetch(`/api/block/${blockName}`))
-
-if (data.value === null || data.value === undefined) {
-  navigateTo('/admin/block')
-  throw createError({
-    statusMessage: error.value?.message ?? 'Block not found.',
-    statusCode: error.value?.statusCode ?? 404,
-  })
-}
-const block = reactive(data.value)
+const page = reactive<Partial<Page>>({})
 
 async function onSubmit() {
   loading.value = true
-  await $fetch(`/api/block/${blockName}`, {
-    method: 'PUT',
-    body: JSON.stringify(block),
+  const newPage = await $fetch('/api/page', {
+    method: 'POST',
+    body: JSON.stringify(page),
   })
   loading.value = false
-  await navigateTo('/admin/block')
+  await navigateTo(`/admin/page/${newPage.id}`)
 }
 </script>
 
@@ -38,7 +29,7 @@ async function onSubmit() {
           v-tooltip="'Back'"
           flat
           icon="mdi-arrow-left"
-          to="/admin/block"
+          to="/admin/page"
         />
       </template>
       <template #append>
@@ -53,7 +44,7 @@ async function onSubmit() {
       </template>
 
       <template #title>
-        Edit Block
+        New Page
       </template>
 
       <template #text>
@@ -67,19 +58,19 @@ async function onSubmit() {
             grid-list-xs
           >
             <v-text-field
-              v-model="block.name"
-              label="Name"
+              v-model="page.slug"
+              label="Slug"
               :rules="[vRequired]"
               required
             />
             <v-text-field
-              v-model="block.description"
+              v-model="page.description"
               label="Description"
               required
             />
 
             <markdown-editor
-              v-model="block.content"
+              v-model="page.content"
               rounded
               label="Content"
               variant="outlined"

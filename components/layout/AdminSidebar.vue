@@ -24,6 +24,11 @@ const items: ListItem[] = [
     to: '/admin/block',
     prependIcon: 'mdi-toy-brick',
   },
+  {
+    title: 'Pages',
+    to: '/admin/page',
+    prependIcon: 'mdi-file-document',
+  },
 ]
 </script>
 
