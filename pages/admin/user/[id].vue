@@ -1,14 +1,16 @@
 <script setup lang="ts">
-const valid = ref(false)
+import { VForm } from 'vuetify/components/VForm'
+
 const loading = ref(false)
-const form = ref<HTMLFormElement | null>(null)
+const form = ref<VForm | null>(null)
 
-const userId = useRoute().params.userId
+const id = useRoute().params.id as string
 
-const { data, error } = await useAsyncData(`user/${userId}`, () => $fetch(`/api/user/${userId}`))
+const { data, error } = await useFetch(`/api/user/${id}`)
 
 if (data.value === null || data.value === undefined) {
   navigateTo('/admin/user')
+  errorAlert('Page not found!')
   throw createError({
     statusMessage: error.value?.message ?? 'User not found.',
     statusCode: error.value?.statusCode ?? 404,
@@ -16,13 +18,27 @@ if (data.value === null || data.value === undefined) {
 }
 const user = reactive(data.value)
 
+const repeatPassword = ref('')
+
 async function onSubmit() {
+  if (form.value === undefined || form.value === null) {
+    return
+  }
+
+  const { valid } = await form.value.validate()
+  if (!valid) {
+    return
+  }
+
   loading.value = true
-  await $fetch(`/api/user/${userId}`, {
+  await $fetch(`/api/user/${id}`, {
     method: 'PUT',
     body: JSON.stringify(user),
   })
   loading.value = false
+
+  successAlert('Success!')
+
   navigateTo('/admin/user')
 }
 </script>
@@ -46,7 +62,6 @@ async function onSubmit() {
           v-tooltip="'Save'"
           variant="flat"
           icon="mdi-content-save"
-          :disabled="!valid"
           :loading="loading"
           @click="onSubmit()"
         />
@@ -59,13 +74,21 @@ async function onSubmit() {
       <template #text>
         <v-form
           ref="form"
-          v-model="valid"
+          validate-on="submit"
           @submit.prevent="onSubmit()"
         >
           <v-container
             fluid
             grid-list-xs
           >
+            <v-text-field
+              v-model="user.id"
+              label="ID"
+              :rules="[vRequired]"
+              disabled
+              required
+            />
+
             <v-text-field
               v-model="user.name"
               label="Name"
@@ -83,6 +106,18 @@ async function onSubmit() {
               label="Username"
               :rules="[vRequired]"
               required
+            />
+
+            <v-text-field
+              v-model="user.password"
+              label="Password"
+              :rules="[(value) => !value || !!repeatPassword || 'Enter your new password again.']"
+            />
+
+            <v-text-field
+              v-model="repeatPassword"
+              label="Repeat Password"
+              :rules="[(value) => user.password === undefined || (user.password.length === 0 && value.length === 0) || value === user.password || 'Password must match!']"
             />
           </v-container>
         </v-form>

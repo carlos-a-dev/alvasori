@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
@@ -10,8 +11,8 @@ export default eventHandler(async (event) => {
 
   return await prisma.user.findUnique({
     where: {
-      id: getRouterParam(event, 'id'),
+      id: getRouterParam(event, 'id') as string,
     },
-    select: select,
+    select: select as Prisma.UserSelect,
   })
 })
