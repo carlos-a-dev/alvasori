@@ -5,11 +5,11 @@ module.exports = {
       max_memory_restart: '200M',
 
       // Logging
-      //   out_file: './out.log',
-      //   error_file: './error.log',
-      //   merge_logs: true,
-      //   log_date_format: 'DD-MM HH:mm:ss Z',
-      //   log_type: 'json',
+      out_file: '../logs/out.log',
+      error_file: '../logs/error.log',
+      merge_logs: true,
+      log_date_format: 'DD-MM HH:mm:ss Z',
+      log_type: 'json',
 
       // Env Specific Config
       env_production: {
@@ -25,6 +25,7 @@ module.exports = {
         PORT: 5001,
         mode: 'fork',
         instances: '1',
+        DATABASE_URL: 'file:/var/www/stage.alvasori.net/db/alvasori.db',
       },
       env_development: {
         name: 'alvasori-dev',

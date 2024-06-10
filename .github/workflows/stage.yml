@@ -25,7 +25,9 @@ jobs:
         run: yarn
 
       - name: Build Nuxt.js app
-        run: yarn build
+        run: |
+          npx prisma generate
+          yarn build
 
       - name: Deploy to VPS
         env:
@@ -40,6 +42,13 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
           rsync -avz . $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
+
+      - name: Run migrations
+        env:
+          VPS_USER: ${{ vars.VPS_USER }}
+          VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
+          VPS_PATH: ${{ vars.VPS_PATH }}
+        run: ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "cd $VPS_PATH && npx prisma migrate"'
 
       - name: Restart App
         env:
