@@ -12,46 +12,19 @@ jobs:
     environment: stage
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'  # specify the Node.js version you need
-          cache: 'yarn'
-
-      - name: Install dependencies
-        run: yarn
-
-      - name: Build Nuxt.js app
-        run: |
-          npx prisma generate
-          yarn build
-
-      - name: Deploy to VPS
+      - name: Setup SSH keys
         env:
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
           SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
-          VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
-          VPS_USER: ${{ vars.VPS_USER }}
-          VPS_PATH: ${{ vars.VPS_PATH }}
         run: |
           mkdir -p ~/.ssh
           echo "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
-          rsync -avz . $VPS_USER@$VPS_IP_ADDRESS:$VPS_PATH
 
-      - name: Run migrations
+      - name: Deploy
         env:
           VPS_USER: ${{ vars.VPS_USER }}
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
-        run: ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "cd $VPS_PATH && npx prisma migrate"'
-
-      - name: Restart App
-        env:
-          VPS_USER: ${{ vars.VPS_USER }}
-          VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
-        run: ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "pm2 reload alvasori-stage"'
+        run: ssh $VPS_USER@$VPS_IP_ADDRESS 'bash -lc "cd $VPS_PATH && ./.server/stage/build.sh"'
