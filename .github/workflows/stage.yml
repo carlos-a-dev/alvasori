@@ -27,4 +27,4 @@ jobs:
           VPS_USER: ${{ vars.VPS_USER }}
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
-        run: ssh "$VPS_USER@$VPS_IP_ADDRESS" "bash -lc 'cd \"$VPS_PATH\" && ./.server/stage/build.sh'"
+        run: ssh "$VPS_USER@$VPS_IP_ADDRESS" "bash -lc 'cd \"$VPS_PATH\" && pwd && ./.server/stage/build.sh'"
