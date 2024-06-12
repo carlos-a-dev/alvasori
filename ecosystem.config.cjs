@@ -14,14 +14,16 @@ module.exports = {
       // Env Specific Config
       env_production: {
         name: 'alvasori',
+        cwd: '/var/www/alvasori.net/web/',
         NODE_ENV: 'production',
         PORT: 5000,
         exec_mode: 'cluster',
-        instances: 0,
+        instances: '2',
+        DATABASE_URL: 'file:../db/alvasori.db',
       },
       env_stage: {
         name: 'alvasori-stage',
-        cwd: '/var/www/stage.materialbank.net/web/',
+        cwd: '/var/www/stage.alvasori.net/web/',
         NODE_ENV: 'production',
         PORT: 5001,
         mode: 'fork',

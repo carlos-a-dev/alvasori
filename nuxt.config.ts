@@ -6,6 +6,7 @@ export default defineNuxtConfig({
     '@nuxt/eslint',
     '@pinia/nuxt',
     'vuetify-nuxt-module',
+    'nuxt-build-cache',
   ],
   content: {
     highlight: {
