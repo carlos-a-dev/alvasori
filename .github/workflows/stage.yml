@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - stage  # or the branch you want to deploy from
+      - stage
 
 jobs:
   deploy:
@@ -27,4 +27,4 @@ jobs:
           VPS_USER: ${{ vars.VPS_USER }}
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
-        run: ssh "$VPS_USER@$VPS_IP_ADDRESS" "cd \"$VPS_PATH\" && git pull --rebase && bash -t .server/stage/build.sh"
+        run: ssh -t "$VPS_USER@$VPS_IP_ADDRESS" "cd \"$VPS_PATH\" && git pull --rebase && bash -i .server/stage/build.sh"

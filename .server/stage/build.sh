@@ -1,7 +1,6 @@
 # Pull and deploy
 DATABASE_URL="file:../db/alvasori.db"
 
-git pull --rebase
 yarn
 npx prisma generate
 yarn build
