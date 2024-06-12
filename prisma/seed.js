@@ -84,7 +84,7 @@ async function addPages() {
     update: {},
     create: {
       slug: 'about',
-      description: 'My first block.',
+      description: 'My first page.',
       content: `---
 title: Custom About Us
 subtitle: This came from the database!

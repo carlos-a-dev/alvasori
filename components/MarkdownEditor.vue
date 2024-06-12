@@ -39,6 +39,10 @@ watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
                 language="en-US"
                 :toolbars="[...(allToolbar as ToolbarNames[]), 0]"
                 :toolbars-exclude="['preview', 'fullscreen', 'mermaid', 'htmlPreview', 'pageFullscreen', 'save', 'previewOnly', 'catalog', 'github', 'katex']"
+                :footers="['markdownTotal']"
+                no-mermaid
+                no-katex
+                no-upload-img
               >
                 <template #defToolbars>
                   <NormalToolbar

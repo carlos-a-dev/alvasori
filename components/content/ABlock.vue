@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import markdownParser from '@nuxt/content/transformers/markdown'
+import type { ParsedContent } from '@nuxt/content/types'
 
 const props = defineProps({
   name: String,
@@ -7,7 +8,7 @@ const props = defineProps({
 
 const blockStore = useBlockStore()
 
-const parsedMarkdown = ref<Record<string, unknown>>({ body: { type: 'root', children: [] } })
+const parsedMarkdown = ref<ParsedContent>({ _id: '', body: { type: 'root', children: [] } })
 
 watch(() => props.name, async (blockName) => {
   let content = ''
@@ -33,12 +34,8 @@ watch(() => props.name, async (blockName) => {
     v-bind="$attrs"
     class="pa-0"
   >
-    <ContentRenderer
+    <ContentRendererMarkdown
       :value="parsedMarkdown"
-    >
-      <ContentRendererMarkdown
-        :value="parsedMarkdown"
-      />
-    </ContentRenderer>
+    />
   </v-container>
 </template>

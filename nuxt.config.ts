@@ -28,6 +28,10 @@ export default defineNuxtConfig({
         VTextarea: { variant: 'outlined', rounded: true, density: 'comfortable' },
         VCard: { variant: 'elevated', rounded: 'xl' },
       },
+      icons: {
+        defaultSet: 'mdi',
+        sets: ['mdi'],
+      },
     },
   },
   routeRules: {
