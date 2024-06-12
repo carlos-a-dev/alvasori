@@ -1,21 +1,16 @@
 <script setup lang="ts">
 import type { ParsedContent } from '@nuxt/content/types'
 
-const doc = useState<ParsedContent>('parsed-content', () => ({ _id: 'none', body: { type: 'root', children: [] } }))
-
 definePageMeta({
   middleware: ['content'],
 })
+const doc = useState<ParsedContent>('content_rendered')
 useContentHead(doc)
 </script>
 
 <template>
-  <ContentRenderer
+  <ContentRendererMarkdown
     :value="doc"
-  >
-    <ContentRendererMarkdown
-      :value="doc"
-      class="w-100 fill-height"
-    />
-  </ContentRenderer>
+    class="w-100 fill-height"
+  />
 </template>
