@@ -1,5 +1,5 @@
 # Pull and deploy
-DATABASE_URL="file:../db/alvasori.db"
+export DATABASE_URL="file:../db/alvasori.db"
 
 yarn
 npx prisma generate
