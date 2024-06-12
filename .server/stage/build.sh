@@ -1,8 +1,11 @@
 # Pull and deploy
-export DATABASE_URL="file:../db/alvasori.db"
 
 yarn
+
+export DATABASE_URL="file:../db/alvasori.db"
 npx prisma generate
-yarn build
 npx prisma migrate deploy
-pm2 restart alvasori-stage
+unset DATABASE_URL
+
+yarn build
+pm2 --update-env restart alvasori-stage

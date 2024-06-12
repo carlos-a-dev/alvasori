@@ -21,11 +21,12 @@ module.exports = {
       },
       env_stage: {
         name: 'alvasori-stage',
+        cwd: '/var/www/stage.materialbank.net/web/',
         NODE_ENV: 'production',
         PORT: 5001,
         mode: 'fork',
         instances: '1',
-        DATABASE_URL: 'file:/var/www/stage.alvasori.net/db/alvasori.db',
+        DATABASE_URL: 'file:../db/alvasori.db',
       },
       env_development: {
         name: 'alvasori-dev',
