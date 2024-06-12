@@ -17,8 +17,8 @@ module.exports = {
         cwd: '/var/www/alvasori.net/web/',
         NODE_ENV: 'production',
         PORT: 5000,
-        exec_mode: 'cluster',
-        instances: '2',
+        exec_mode: 'fork',
+        instances: '1',
         DATABASE_URL: 'file:../db/alvasori.db',
       },
       env_stage: {
