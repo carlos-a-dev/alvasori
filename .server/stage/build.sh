@@ -1,5 +1,3 @@
-# Pull and deploy
-
 pnpm i
 
 export DATABASE_URL="file:/var/www/stage.alvasori.net/db/alvasori.db"

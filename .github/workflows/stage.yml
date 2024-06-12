@@ -27,4 +27,4 @@ jobs:
           VPS_USER: ${{ vars.VPS_USER }}
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
-        run: ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" "cd \"$VPS_PATH\" && git pull --rebase && bash -i .server/stage/build.sh"
+        run: ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" "cd \"$VPS_PATH\" && git checkout stage && git pull --rebase && bash -i .server/stage/build.sh"
