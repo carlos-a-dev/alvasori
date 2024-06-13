@@ -1,17 +1,9 @@
 <script setup lang="ts">
 import 'md-editor-v3/lib/style.css'
 import { MdEditor, NormalToolbar, allToolbar, type ToolbarNames } from 'md-editor-v3'
-import markdownParser from '@nuxt/content/transformers/markdown'
 
 const value = defineModel<string>()
 const enablePreview = ref(true)
-const preview = ref<Record<string, unknown>>({ body: { type: 'root', children: [] } })
-
-watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
-  if (newEnablePreview && markdownParser.parse !== undefined) {
-    preview.value = await markdownParser.parse('preview.md', newValue ?? '', {})
-  }
-}, { immediate: true })
 </script>
 
 <template>
@@ -19,13 +11,14 @@ watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
     v-model="value"
     class="markdown-editor-input"
   >
-    <template #default="{ isDirty, isValid, isPristine }">
+    <template #default="{ id, isDirty, isValid, isPristine }">
       <v-field
         v-bind="$attrs"
         v-model="value"
         :active="value !== undefined && value?.length > 0"
         :dirty="isDirty.value"
         :error="!isPristine.value && !isValid.value"
+        :id="id.value"
       >
         <v-container>
           <v-row>
@@ -33,6 +26,7 @@ watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
               cols="12"
               :sm="enablePreview ? '6' : '12'"
             >
+            <input type="hidden" :value="value" :id="id.value" class="redox">
               <MdEditor
                 v-model="value"
                 :preview="false"
@@ -62,12 +56,7 @@ watch([value, enablePreview], async ([newValue, newEnablePreview]) => {
               sm="6"
             >
               <v-container class="border-thin fill-height align-start px-5 overflow-auto">
-                <ContentRenderer :value="preview">
-                  <ContentRendererMarkdown
-                    :value="preview"
-                    class="w-100"
-                  />
-                </ContentRenderer>
+                <a-markdown :value="value" class="w-100" />
               </v-container>
             </v-col>
           </v-row>

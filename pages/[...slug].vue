@@ -9,7 +9,7 @@ useContentHead(doc)
 </script>
 
 <template>
-  <ContentRendererMarkdown
+  <a-markdown
     :value="doc"
     class="w-100 fill-height"
   />
