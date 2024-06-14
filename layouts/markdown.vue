@@ -1,6 +1,6 @@
 <template>
   <v-app id="alvasori">
-    <layout-nav-header />
+    <layout-header />
 
     <v-main class="fill-height">
       <layout-app-alerts />

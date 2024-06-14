@@ -1,3 +1,17 @@
+<script setup lang="ts">
+const links = [
+  { label: 'Home', to: '/' },
+  { label: 'About Us', to: '/about' },
+  { label: 'Contact Us', to: '/contactus' },
+]
+
+const transparent = ref(true)
+
+const onScroll = debounce(() => {
+  transparent.value !== (window.scrollY <= 5) && (transparent.value = !transparent.value)
+}, 100)
+</script>
+
 <template>
   <v-app-bar
     v-scroll="onScroll"
@@ -31,20 +45,6 @@
     </v-container>
   </v-app-bar>
 </template>
-
-<script setup lang="ts">
-const links = [
-  { label: 'Home', to: '/' },
-  { label: 'About Us', to: '/about' },
-  { label: 'Contact Us', to: '/contactus' },
-]
-
-const transparent = ref(true)
-
-const onScroll = debounce(() => {
-  transparent.value !== (window.scrollY <= 5) && (transparent.value = !transparent.value)
-}, 100)
-</script>
 
 <style scoped>
 .my-nav {

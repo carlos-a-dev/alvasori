@@ -1,6 +1,6 @@
 <template>
   <v-app id="alvasori">
-    <layout-nav-header />
+    <layout-header />
 
     <v-main class="fill-height pt-0">
       <slot />
