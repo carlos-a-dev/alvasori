@@ -8,6 +8,7 @@ async function main() {
   await addAdminUser()
   await addBlocks()
   await addPages()
+  await addConfigs()
 }
 
 async function addAdminUser() {
@@ -95,6 +96,28 @@ subtitle: This came from the database!
 ---
 
 :vBtn{text="Hello" variant="tonal"}`,
+    },
+  })
+}
+
+async function addConfigs() {
+  await prisma.config.upsert({
+    where: { path: 'app-name' },
+    update: {},
+    create: {
+      path: 'app-name',
+      value: 'AlvaSori',
+      description: 'Name showed throughout the App.',
+    },
+  })
+
+  await prisma.config.upsert({
+    where: { path: 'contact-form-recipients' },
+    update: {},
+    create: {
+      path: 'contact-form-recipients',
+      value: '',
+      description: 'Emails to send the contact requests to.',
     },
   })
 }

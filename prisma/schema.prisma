@@ -17,7 +17,7 @@ model User {
   password  String
   email     String    @unique
   createdAt DateTime  @default(now())
-  updatedAt DateTime?
+  updatedAt DateTime? @updatedAt
   sessions  Session[]
 }
 
@@ -34,7 +34,7 @@ model Block {
   description String?
   content     String
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime?
+  updatedAt   DateTime? @updatedAt
 }
 
 model Page {
@@ -43,5 +43,15 @@ model Page {
   description String?
   content     String
   createdAt   DateTime  @default(now())
-  updatedAt   DateTime?
+  updatedAt   DateTime? @updatedAt
+}
+
+model Config {
+  path        String    @id
+  value       String
+  description String?
+  type        String    @default("text")
+  component   String    @default("VTextField")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime? @updatedAt
 }
