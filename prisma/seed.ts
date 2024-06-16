@@ -106,8 +106,10 @@ async function addConfigs() {
     update: {},
     create: {
       path: 'app-name',
-      value: 'AlvaSori',
+      value: '[A]{.text-red}lva[S]{.text-red}ori',
       description: 'Name showed throughout the App.',
+      component: 'MarkdownEditor',
+      type: 'string',
     },
   })
 

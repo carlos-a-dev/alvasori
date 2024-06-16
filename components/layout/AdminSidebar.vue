@@ -40,6 +40,7 @@ const isOpen = defineModel({
 
         <v-list-item
           title="App Name"
+          to="/admin/config/app-name"
         />
         <v-list-item
           title="App Logo"

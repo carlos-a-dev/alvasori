@@ -6,6 +6,7 @@ import { watch, ref, toRef } from 'vue'
 interface Props {
   value: string | ParsedContent
   documentId?: string
+  unwrap?: string
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -16,6 +17,18 @@ const props = withDefaults(defineProps<Props>(), {
 const value = toRef(props, 'value')
 
 const parsedValue = ref<ParsedContent>({ _id: '', body: { type: 'root', children: [] } })
+
+function unwrapContent(content: ParsedContent, tag: string) {
+  if (
+    content.body?.children[0] !== undefined
+    && content.body?.children[0].tag === tag
+    && content.body?.children[0].children !== undefined
+  ) {
+    content.body.children = content.body?.children[0].children
+  }
+
+  return content
+}
 
 watch(value, async (newValue) => {
   if (typeof newValue !== 'string') {
@@ -30,6 +43,9 @@ watch(value, async (newValue) => {
 
   try {
     parsedValue.value = await markdownParser.parse(props.documentId, newValue ?? '', {})
+    if (props.unwrap !== undefined) {
+      parsedValue.value = unwrapContent(parsedValue.value, props.unwrap)
+    }
   }
   catch (error) {
     console.error('Error parsing markdown:', error)

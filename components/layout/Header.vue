@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
 const links = [
   { label: 'Home', to: '/' },
@@ -29,7 +30,7 @@ const onScroll = debounce(() => {
       />
 
       <v-app-bar-title class="text-h4 font-weight-bold">
-        <span class="text-red-accent-4">A</span>lva<span class="text-red-accent-4">S</span>ori
+        <app-name />
       </v-app-bar-title>
 
       <v-btn

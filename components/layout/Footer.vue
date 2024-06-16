@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <div>
     <v-footer
@@ -10,7 +11,7 @@
       <v-divider />
 
       <div>
-        {{ new Date().getFullYear() }} — <strong>AlvaSori</strong>
+        {{ new Date().getFullYear() }} — <strong><app-name /></strong>
       </div>
     </v-footer>
   </div>

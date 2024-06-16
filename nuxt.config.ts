@@ -1,6 +1,10 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: false },
+  components: {
+    global: true,
+    dirs: ['~/components'],
+  },
   modules: [
     '@nuxt/content',
     '@nuxt/eslint',
@@ -21,7 +25,7 @@ export default defineNuxtConfig({
   },
   vuetify: {
     vuetifyOptions: {
-      components: ['VBtn', 'VCard', 'VContainer'],
+      components: ['VBtn', 'VCard', 'VContainer', 'VTextField'],
       defaults: {
         VBtn: { variant: 'flat', rounded: true },
         VTextField: { variant: 'outlined', rounded: true, density: 'comfortable' },
