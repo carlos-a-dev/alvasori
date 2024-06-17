@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { useAuthenticatedUser } = useAuth()
+
 const user = useAuthenticatedUser()
 
 const drawerOpen = ref(false)
@@ -30,7 +32,7 @@ async function logout() {
         </v-app-bar-title>
 
         <template #append>
-          <span>{{ user.id }}</span>
+          <span>{{ user.name }}</span>
           <v-btn
             icon="mdi-logout"
             title="Log Out"

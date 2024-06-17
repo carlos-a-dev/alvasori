@@ -1,4 +1,6 @@
 <script setup lang="ts">
+const { vRequired } = useValidation()
+
 const valid = ref(false)
 const loading = ref(false)
 const form = ref<HTMLFormElement | null>(null)

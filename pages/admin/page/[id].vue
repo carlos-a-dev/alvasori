@@ -1,12 +1,12 @@
 <script setup lang="ts">
+const { successAlert, errorAlert } = useAlerts()
+const { vRequired } = useValidation()
+
 const valid = ref(false)
 const loading = ref(false)
 const form = ref<HTMLFormElement | null>(null)
-
 const route = useRoute()
 const pageId = parseInt(route.params.id as string)
-
-const { successAlert, errorAlert } = useAlerts()
 
 const { data, error } = await useAsyncData(`page-edit`, () => $fetch(`/api/page/${pageId}`))
 

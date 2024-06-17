@@ -58,7 +58,10 @@ export default eventHandler(async (event) => {
     })
   }
 
-  const session = await lucia.createSession(existingUser.id, {})
+  const session = await lucia.createSession(existingUser.id, {
+    // name: existingUser.name,
+    // email: existingUser.email,
+  })
   appendHeader(
     event,
     'Set-Cookie',

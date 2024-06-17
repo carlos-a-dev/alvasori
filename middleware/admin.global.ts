@@ -15,6 +15,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
     return navigateTo('/admin')
   }
 
+  const { useUser } = useAuth()
+
   const authenticatedUser = useUser()
   authenticatedUser.value = user
 

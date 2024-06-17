@@ -1,12 +1,13 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components/VForm'
 
+const { vRequired, vEmail } = useValidation()
+const { successAlert, errorAlert } = useAlerts()
+
 const loading = ref(false)
 const form = ref<VForm | null>(null)
 
 const id = useRoute().params.id as string
-
-const { successAlert, errorAlert } = useAlerts()
 
 const { data, error } = await useFetch(`/api/user/${id}`)
 

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type { Block } from '@prisma/client'
 
+const { vRequired } = useValidation()
+
 const valid = ref(false)
 const loading = ref(false)
 const form = ref<HTMLFormElement | null>(null)

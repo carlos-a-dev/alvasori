@@ -1,13 +1,14 @@
 <script setup lang="ts">
 setPageLayout('login')
 
+const { errorAlert } = useAlerts()
+const { vRequired } = useValidation()
+
 const form = ref<HTMLFormElement | null>(null)
 const usernameInput = ref<HTMLInputElement | null>(null)
 const valid = ref(false)
 const loading = ref(false)
 const showPassword = ref(false)
-
-const { errorAlert } = useAlerts()
 
 const payload = reactive({
   username: '',

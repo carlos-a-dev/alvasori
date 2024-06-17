@@ -1,6 +1,8 @@
 <script setup lang="ts">
 setPageLayout('login')
 
+const { vRequired, vEmail } = useValidation()
+
 const valid = ref(false)
 const alert = reactive<{
   show: boolean

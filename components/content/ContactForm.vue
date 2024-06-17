@@ -3,6 +3,7 @@ import { VForm } from 'vuetify/components'
 
 const { executeRecaptcha } = useGoogleRecaptcha()
 const { successAlert, errorAlert } = useAlerts()
+const { vRequired, vEmail, vMaxLength } = useValidation()
 
 const form = ref<VForm | null>(null)
 const valid = ref(false)
