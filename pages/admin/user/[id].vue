@@ -6,6 +6,8 @@ const form = ref<VForm | null>(null)
 
 const id = useRoute().params.id as string
 
+const { successAlert, errorAlert } = useAlerts()
+
 const { data, error } = await useFetch(`/api/user/${id}`)
 
 if (data.value === null || data.value === undefined) {

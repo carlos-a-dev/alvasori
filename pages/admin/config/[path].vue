@@ -5,6 +5,8 @@ const form = ref<HTMLFormElement | null>(null)
 
 const path = useRoute().params.path
 
+const { successAlert, errorAlert } = useAlerts()
+
 const { data, error } = await useAsyncData(`config/${path}`, () => $fetch(`/api/config/${path}`))
 
 if (data.value === null || data.value === undefined) {

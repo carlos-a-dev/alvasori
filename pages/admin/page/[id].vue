@@ -6,6 +6,8 @@ const form = ref<HTMLFormElement | null>(null)
 const route = useRoute()
 const pageId = parseInt(route.params.id as string)
 
+const { successAlert, errorAlert } = useAlerts()
+
 const { data, error } = await useAsyncData(`page-edit`, () => $fetch(`/api/page/${pageId}`))
 
 if (data.value === null || data.value === undefined) {

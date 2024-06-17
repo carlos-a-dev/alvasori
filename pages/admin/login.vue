@@ -7,7 +7,7 @@ const valid = ref(false)
 const loading = ref(false)
 const showPassword = ref(false)
 
-const { sendAlert } = useAlertStore()
+const { errorAlert } = useAlerts()
 
 const payload = reactive({
   username: '',
@@ -23,10 +23,7 @@ async function onSubmit() {
   loading.value = false
 
   if (result.error.value) {
-    sendAlert({
-      type: 'error',
-      text: result.error.value.data?.message || 'There is an error with your request.',
-    })
+    errorAlert(result.error.value.data?.message || 'There is an error with your request.')
 
     form.value?.reset()
     usernameInput.value?.focus()

@@ -12,7 +12,7 @@ const { alerts, removeAlert } = useAlertStore()
       density="compact"
       tile
       closable
-      @click:close="removeAlert(index)"
+      @click:close="removeAlert(alert)"
     />
   </v-expand-transition>
 </template>
