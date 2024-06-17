@@ -14,8 +14,31 @@ const payload = reactive({
   message: '',
 })
 
-function onSubmit() {
+async function onSubmit() {
   loading.value = true
+
+  try {
+    const message = await $fetch('/api/contact/send', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    })
+
+    console.debug(message) // debug
+    resetForm()
+
+    sendAlert({
+      type: 'success',
+      text: 'Success!',
+    })
+  }
+  catch (error) {
+    console.log(error)
+    errorAlert('Your message could not be delivered, please try again later.')
+  }
+  finally {
+    loading.value = false
+  }
+
   setTimeout(() => {
     loading.value = false
     resetForm()
