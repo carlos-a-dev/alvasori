@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
 
-const { sendAlert } = useAlertStore()
+const { executeRecaptcha } = useGoogleRecaptcha()
 
 const form = ref<VForm | null>(null)
 const valid = ref(false)
@@ -17,36 +17,28 @@ const payload = reactive({
 async function onSubmit() {
   loading.value = true
 
+  const data = await executeRecaptcha('submit')
   try {
     const message = await $fetch('/api/contact/send', {
       method: 'POST',
-      body: JSON.stringify(payload),
+      body: JSON.stringify({
+        ...payload,
+        'g-recaptcha-response': data.token,
+      }),
     })
 
     console.debug(message) // debug
     resetForm()
 
-    sendAlert({
-      type: 'success',
-      text: 'Success!',
-    })
+    successAlert('Success!')
   }
   catch (error) {
-    console.log(error)
+    console.error(error)
     errorAlert('Your message could not be delivered, please try again later.')
   }
   finally {
     loading.value = false
   }
-
-  setTimeout(() => {
-    loading.value = false
-    resetForm()
-    sendAlert({
-      type: 'success',
-      text: 'Success!',
-    })
-  }, 2000)
 }
 
 function resetForm() {
