@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 
-const prisma = new PrismaClient()
-
 export default eventHandler(async (event) => {
-  return await prisma.page.findUnique({
+  checkAuth(event)
+
+  const prisma = new PrismaClient()
+
+  return prisma.page.findUnique({
     where: {
       id: parseInt(getRouterParam(event, 'id') as string),
     },

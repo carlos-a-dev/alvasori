@@ -3,9 +3,9 @@ import { PrismaClient } from '@prisma/client'
 import markdownParser from '@nuxt/content/transformers/markdown'
 import { serverQueryContent } from '#content/server'
 
-const prisma = new PrismaClient()
-
 export default eventHandler(async (event) => {
+  const prisma = new PrismaClient()
+
   let slug = getRouterParam(event, 'slug')
 
   const page: Page | null = await prisma.page.findUnique({
@@ -15,7 +15,7 @@ export default eventHandler(async (event) => {
   })
 
   if (page !== null && markdownParser.parse !== undefined) {
-    return await markdownParser.parse(`${slug}.md`, page.content, {})
+    return markdownParser.parse(`${slug}.md`, page.content, {})
   }
 
   if (slug === 'home') {
