@@ -43,7 +43,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <v-container>
+  <v-container class="px-0 px-md-4">
     <v-card
       flat
       :loading="loading"
@@ -80,6 +80,7 @@ async function onSubmit() {
           @submit.prevent="onSubmit()"
         >
           <v-container
+            class="px-0"
             fluid
             grid-list-xs
           >
