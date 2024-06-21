@@ -3,12 +3,30 @@ import { Argon2id } from 'oslo/password'
 const prisma = getPrismaClient()
 
 interface IBody {
-  username: string
-  password: string
+  'username': string
+  'password': string
+  'g-recaptcha-response': string
 }
 
 export default eventHandler(async (event) => {
   const body = await readBody<IBody>(event)
+
+  if (!body['g-recaptcha-response']) {
+    return createError({
+      statusCode: 403,
+      statusMessage: 'Invalid Captcha!',
+    })
+  }
+
+  const validCaptcha = await verifyRecaptcha(body['g-recaptcha-response'])
+
+  if (!validCaptcha) {
+    return createError({
+      statusCode: 403,
+      statusMessage: 'Invalid Captcha!',
+    })
+  }
+
   const username = body.username
   if (
     typeof username !== 'string'
@@ -17,7 +35,7 @@ export default eventHandler(async (event) => {
     || !/^[a-z0-9_-]+$/.test(username)
   ) {
     throw createError({
-      message: 'Invalid username',
+      statusMessage: 'Invalid username',
       statusCode: 400,
     })
   }
@@ -28,7 +46,7 @@ export default eventHandler(async (event) => {
     || password.length > 255
   ) {
     throw createError({
-      message: 'Invalid password',
+      statusMessage: 'Invalid password',
       statusCode: 400,
     })
   }
@@ -41,8 +59,8 @@ export default eventHandler(async (event) => {
 
   if (!existingUser) {
     throw createError({
-      message: 'Incorrect username or password',
-      statusCode: 400,
+      statusMessage: 'Incorrect username or password',
+      statusCode: 403,
     })
   }
 

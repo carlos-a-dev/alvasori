@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { FetchError } from 'ofetch'
+
 setPageLayout('login')
 
 const { errorAlert } = useAlerts()
 const { vRequired } = useValidation()
+const { executeRecaptcha } = useGoogleRecaptcha()
 
 const form = ref<HTMLFormElement | null>(null)
 const usernameInput = ref<HTMLInputElement | null>(null)
@@ -17,21 +20,30 @@ const payload = reactive({
 
 async function onSubmit() {
   loading.value = true
-  const result = await useFetch('/api/auth/login', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  })
-  loading.value = false
+  try {
+    const data = await executeRecaptcha('submit')
+    await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...payload,
+        'g-recaptcha-response': data.token,
+      }),
+    })
 
-  if (result.error.value) {
-    errorAlert(result.error.value.data?.message || 'There is an error with your request.')
+    await navigateTo('/admin')
+  }
+  catch (error) {
+    console.error(error)
+    if (error instanceof FetchError) {
+      errorAlert(error.statusMessage || 'There is an error with your request.')
+    }
 
     form.value?.reset()
     usernameInput.value?.focus()
-    return
   }
-
-  await navigateTo('/admin')
+  finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -96,6 +108,15 @@ async function onSubmit() {
               >
                 Log In
               </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <p class="text-center">
+                This site is protected by reCAPTCHA and the Google
+                <a href="https://policies.google.com/privacy">Privacy Policy</a> and
+                <a href="https://policies.google.com/terms">Terms of Service</a> apply.
+              </p>
             </v-col>
           </v-row>
         </v-container>
