@@ -1,11 +1,10 @@
 import type { User } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 import { Argon2id } from 'oslo/password'
 
 export default eventHandler(async (event) => {
   checkAuth(event)
 
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
   const id = getRouterParam(event, 'id')
   const body: Partial<User> = await readBody(event)
 

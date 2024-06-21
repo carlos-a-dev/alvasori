@@ -1,10 +1,9 @@
 import type { Config } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 
 export default eventHandler(async (event) => {
   checkAuth(event)
 
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
   const configPath = getRouterParam(event, 'path')
   const body: Partial<Config> = await readBody(event)
 

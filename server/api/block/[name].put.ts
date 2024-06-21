@@ -1,10 +1,9 @@
 import type { Block } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 
 export default eventHandler(async (event) => {
   checkAuth(event)
 
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
   if (event.context.user === null) {
     return createError({
       statusCode: 403,

@@ -1,8 +1,7 @@
 import type { Block } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 
 export default eventHandler(async (event) => {
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
 
   const name = getRouterParam(event, 'name')
 

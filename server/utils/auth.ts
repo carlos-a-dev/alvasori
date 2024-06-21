@@ -1,10 +1,9 @@
 import { Lucia } from 'lucia'
 import { PrismaAdapter } from '@lucia-auth/adapter-prisma'
 import type { User } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 import type { EventHandlerRequest, H3Event } from 'h3'
 
-const client = new PrismaClient()
+const client = getPrismaClient()
 
 const adapter = new PrismaAdapter(client.session, client.user)
 

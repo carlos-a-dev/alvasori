@@ -1,10 +1,9 @@
 import type { Page } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 
 export default eventHandler(async (event) => {
   checkAuth(event)
 
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
   const pageId = parseInt(getRouterParam(event, 'id') as string)
   const body: Partial<Page> = await readBody(event)
 

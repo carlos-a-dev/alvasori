@@ -1,7 +1,5 @@
-import type { Message } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
+import type { Message, PrismaClient } from '@prisma/client'
 import sgMail from '@sendgrid/mail'
-import { verifyRecaptcha } from '~/server/utils/googleReCaptcha'
 
 type MessageWithCaptcha = Message & {
   'g-recaptcha-response': string | undefined
@@ -48,7 +46,7 @@ async function sendMessage(prisma: PrismaClient, msg: Message) {
 }
 
 export default eventHandler(async (event) => {
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
   const message: MessageWithCaptcha = await readBody<MessageWithCaptcha>(event)
 
   if (!message['g-recaptcha-response']) {

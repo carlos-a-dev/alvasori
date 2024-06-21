@@ -1,8 +1,8 @@
 import { Argon2id } from 'oslo/password'
-import { PrismaClient, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { generateId } from 'lucia'
 
-const prisma = new PrismaClient()
+const prisma = getPrismaClient()
 
 interface IBody {
   username: string

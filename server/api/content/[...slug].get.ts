@@ -1,10 +1,9 @@
 import type { Page } from '@prisma/client'
-import { PrismaClient } from '@prisma/client'
 import markdownParser from '@nuxt/content/transformers/markdown'
 import { serverQueryContent } from '#content/server'
 
 export default eventHandler(async (event) => {
-  const prisma = new PrismaClient()
+  const prisma = getPrismaClient()
 
   let slug = getRouterParam(event, 'slug')
 

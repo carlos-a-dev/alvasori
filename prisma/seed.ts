@@ -1,8 +1,7 @@
-import { PrismaClient } from '@prisma/client'
 import { Argon2id } from 'oslo/password'
 import { generateId } from 'lucia'
 
-const prisma = new PrismaClient()
+const prisma = getPrismaClient()
 
 async function main() {
   await addAdminUser()
