@@ -63,7 +63,14 @@ async function onSubmit() {
       </template>
 
       <template #title>
-        Edit Config
+        Edit Config: <span class="font-weight-bold">{{ config.path }}</span>
+      </template>
+
+      <template
+        v-if="config.description"
+        #subtitle
+      >
+        {{ config.description }}
       </template>
 
       <template #text>

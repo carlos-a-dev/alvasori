@@ -7,7 +7,19 @@ type MessageWithCaptcha = Message & {
   'g-recaptcha-response': string | undefined
 }
 
-async function sendMessage(msg: Message) {
+async function getConfig(prisma: PrismaClient, path: string) {
+  return await prisma.config.findUnique({
+    select: {
+      path: true,
+      value: true,
+    },
+    where: {
+      path: path,
+    },
+  })
+}
+
+async function sendMessage(prisma: PrismaClient, msg: Message) {
   if (process.env.SENDGRID_API_KEY === undefined) {
     throw createError({
       statusCode: 500,
@@ -15,11 +27,21 @@ async function sendMessage(msg: Message) {
     })
   }
 
+  const recipients = (await getConfig(prisma, 'contact-form-recipients'))?.value
+
+  if (!recipients) {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Recipient list not set',
+    })
+  }
+
   sgMail.setApiKey(process.env.SENDGRID_API_KEY)
 
   await sgMail.send({
     from: 'info@alvasori.net',
-    to: 'carlos.alexander.dev@gmail.com',
+    to: recipients.split(','),
+    replyTo: msg.email,
     subject: `Contact message from ${msg.firstName} ${msg.lastName}`,
     text: `${msg.firstName} says: ${msg.message}`,
   })
@@ -52,7 +74,7 @@ export default eventHandler(async (event) => {
   })
 
   try {
-    await sendMessage(newMessage)
+    await sendMessage(prisma, newMessage)
 
     newMessage = await prisma.message.update({
       data: {

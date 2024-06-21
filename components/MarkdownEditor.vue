@@ -14,11 +14,13 @@ const enablePreview = ref(true)
     <template #default="{ id, isDirty, isValid, isPristine }">
       <v-field
         v-bind="$attrs"
+        :id="id.value"
         v-model="value"
         :active="value !== undefined && value?.length > 0"
         :dirty="isDirty.value"
         :error="!isPristine.value && !isValid.value"
-        :id="id.value"
+        rounded="xl"
+        variant="outlined"
       >
         <v-container>
           <v-row>
@@ -26,7 +28,12 @@ const enablePreview = ref(true)
               cols="12"
               :sm="enablePreview ? '6' : '12'"
             >
-            <input type="hidden" :value="value" :id="id.value" class="redox">
+              <input
+                v-show="false"
+                :id="id.value"
+                type="text"
+                :value="value"
+              >
               <MdEditor
                 v-model="value"
                 :preview="false"
@@ -50,13 +57,20 @@ const enablePreview = ref(true)
                 </template>
               </MdEditor>
             </v-col>
+            <v-divider
+              vertical
+              inset
+            />
             <v-col
               v-if="enablePreview"
               cols="12"
               sm="6"
             >
-              <v-container class="border-thin fill-height align-start px-5 overflow-auto">
-                <a-markdown :value="value" class="w-100" />
+              <v-container class="fill-height align-start px-5 overflow-auto">
+                <a-markdown
+                  :value="value"
+                  class="w-100"
+                />
               </v-container>
             </v-col>
           </v-row>
@@ -71,5 +85,9 @@ const enablePreview = ref(true)
   left: 18px;
   top: 80px;
   transform: translateY(-50%);
+}
+
+.markdown-editor-input .md-editor {
+  border: 0;
 }
 </style>

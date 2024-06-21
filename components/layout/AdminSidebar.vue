@@ -47,6 +47,7 @@ const isOpen = defineModel({
         />
         <v-list-item
           title="Contact Us"
+          to="/admin/config/contact-form-recipients"
         />
         <v-list-item
           title="Theme"

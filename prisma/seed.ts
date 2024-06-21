@@ -119,6 +119,7 @@ async function addConfigs() {
     create: {
       path: 'contact-form-recipients',
       value: '',
+      component: 'AEmails',
       description: 'Emails to send the contact requests to.',
     },
   })

@@ -14,7 +14,7 @@ export default () => {
   const vEmail = (value: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-    if (!emailRegex.test(value)) {
+    if (value !== null && value.trim() !== '' && !emailRegex.test(value)) {
       return 'Invalid email address.'
     }
 

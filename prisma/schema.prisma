@@ -50,21 +50,21 @@ model Config {
   path        String    @id
   value       String
   description String?
-  type        String    @default("text")
+  type        String    @default("string")
   component   String    @default("VTextField")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime? @updatedAt
 }
 
 model Message {
-  id          Int       @id @default(autoincrement())
-  firstName   String
-  lastName    String
-  email       String
-  message     String
-  to          String?
-  sent        Boolean   @default(false)
-  sentDate    DateTime?
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime? @updatedAt
+  id        Int       @id @default(autoincrement())
+  firstName String
+  lastName  String
+  email     String
+  message   String
+  to        String?
+  sent      Boolean   @default(false)
+  sentDate  DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
 }
