@@ -21,7 +21,7 @@ const payload = reactive({
 async function onSubmit() {
   loading.value = true
   try {
-    const data = await executeRecaptcha('submit')
+    const data = await executeRecaptcha('login')
     await $fetch('/api/auth/login', {
       method: 'POST',
       body: JSON.stringify({

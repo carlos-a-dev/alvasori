@@ -5,6 +5,8 @@ type MessageWithCaptcha = Message & {
   'g-recaptcha-response': string | undefined
 }
 
+const config = useRuntimeConfig()
+
 async function getConfig(prisma: PrismaClient, path: string) {
   return await prisma.config.findUnique({
     select: {
@@ -18,7 +20,7 @@ async function getConfig(prisma: PrismaClient, path: string) {
 }
 
 async function sendMessage(prisma: PrismaClient, msg: Message) {
-  if (process.env.SENDGRID_API_KEY === undefined) {
+  if (config.SENDGRID_API_KEY === undefined) {
     throw createError({
       statusCode: 500,
       statusMessage: 'SendGrid API key not found!',
@@ -34,7 +36,7 @@ async function sendMessage(prisma: PrismaClient, msg: Message) {
     })
   }
 
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY)
+  sgMail.setApiKey(config.SENDGRID_API_KEY)
 
   await sgMail.send({
     from: 'info@alvasori.net',
