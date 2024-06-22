@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 module.exports = {
   apps: [
     {
@@ -36,6 +38,7 @@ module.exports = {
         PORT: 3000,
         exec_mode: 'fork',
         instances: '1',
+        DATABASE_URL: process.env.DATABASE_URL,
         // watch: true,
         // watch_delay: 3000,
         // ignore_watch: [

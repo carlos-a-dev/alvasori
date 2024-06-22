@@ -2,10 +2,10 @@
 export default defineNuxtConfig({
   devtools: { enabled: false },
   runtimeConfig: {
-    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY,
-    RECAPTCHA_SECRET_KEY: process.env.RECAPTCHA_SECRET_KEY,
+    SENDGRID_API_KEY: '',
+    RECAPTCHA_SECRET_KEY: '',
     public: {
-      RECAPTCHA_SITE_KEY: process.env.RECAPTCHA_SITE_KEY,
+      RECAPTCHA_SITE_KEY: '',
     },
   },
   components: {
