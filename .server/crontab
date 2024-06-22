@@ -1,0 +1,2 @@
+0 6 * * * cd /var/www/alvasori.net/db && sqlite3 alvasori.db .dump | gzip -c > backups/alvasori-$(date +"%Y-%m-%d-%H-%M-%S").dump.gz
+# zcat my_database.dump.gz | sqlite3 my_database

@@ -3,6 +3,8 @@ adduser -m nginx
 # makes bash the shell by default
 usermod -s /bin/bash nginx
 
+usermod -a -G sudo nginx
+
 cd /home/nginx
 
 mkdir .ssh
@@ -11,7 +13,7 @@ touch .ssh/authorized_keys
 chown -R nginx:nginx .ssh
 
 apt update
-apt install -y nginx
+apt install -y nginx sqlite3
 
 cd /var/www
 
