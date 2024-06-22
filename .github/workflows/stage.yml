@@ -28,6 +28,9 @@ jobs:
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
           DATABASE_URL: ${{ vars.DATABASE_URL }}
+          NUXT_SENDGRID_API_KEY: ${{ secrets.NUXT_SENDGRID_API_KEY }}
+          NUXT_RECAPTCHA_SECRET_KEY: ${{ secrets.NUXT_RECAPTCHA_SECRET_KEY }}
+          NUXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NUXT_PUBLIC_RECAPTCHA_SITE_KEY }}
         run: |
           ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" "bash -i <<EOF
           cd \"$VPS_PATH\"
@@ -38,6 +41,12 @@ jobs:
           npx prisma generate
           npx prisma migrate deploy
           unset DATABASE_URL
+          rm .env
+          cp .env.sample .env
+          sed -i \"s|{{ DATABASE_URL }}|${DATABASE_URL//\//\\/}|g\" .env
+          sed -i \"s|{{ NUXT_SENDGRID_API_KEY }}|${NUXT_SENDGRID_API_KEY//\//\\/}|g\" .env
+          sed -i \"s|{{ NUXT_RECAPTCHA_SECRET_KEY }}|${NUXT_RECAPTCHA_SECRET_KEY//\//\\/}|g\" .env
+          sed -i \"s|{{ NUXT_PUBLIC_RECAPTCHA_SITE_KEY }}|${NUXT_PUBLIC_RECAPTCHA_SITE_KEY//\//\\/}|g\" .env
           pnpm build
           pm2 delete alvasori-stage
           pm2 start ecosystem.config.cjs --env stage
