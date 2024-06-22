@@ -33,10 +33,29 @@ export default () => {
     }
   }
 
+  const vURL = (value: string) => {
+    try {
+      const tUrl = new URL(value)
+      if (tUrl.protocol === 'http:') {
+        return 'Use a safe protocol. Make sure your URL starts with "https:"'
+      }
+
+      if (tUrl.protocol !== 'https:') {
+        return 'Invalid protocol. Make sure your URL starts with "https:"'
+      }
+    }
+    catch (error) {
+      return 'Invalid URL.'
+    }
+
+    return true
+  }
+
   return {
     vRequired,
     vEmail,
     vMaxLength,
     vMinLength,
+    vURL,
   }
 }

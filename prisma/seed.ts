@@ -123,6 +123,31 @@ async function addConfigs() {
       description: 'Emails to send the contact requests to.',
     },
   })
+
+  await prisma.config.upsert({
+    where: { path: 'social-networks' },
+    update: {},
+    create: {
+      path: 'social-networks',
+      type: 'json',
+      value: JSON.stringify([
+        {
+          icon: 'mdi-facebook',
+          link: 'https://www.facebook.com/alvasori',
+        },
+        {
+          icon: 'mdi-linkedin',
+          link: 'https://www.linkedin.com/alvasori',
+        },
+        {
+          icon: 'mdi-instagram',
+          link: 'https://www.instagram.com/alvasori',
+        },
+      ]),
+      component: 'ConfigSocialNetworks',
+      description: 'Social Networks',
+    },
+  })
 }
 
 await main()

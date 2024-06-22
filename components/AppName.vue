@@ -1,5 +1,5 @@
 <script setup lang="ts">
-const configAppName = await useConfigStore().getConfigValue('app-name', 'AppName')
+const { data: configAppName } = await useAsyncData('appName', () => useConfigStore().getConfigValue('app-name', 'AppName'))
 </script>
 
 <template>

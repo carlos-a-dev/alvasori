@@ -5515,5 +5515,5 @@ function searchIcons(search: string, limit: number = 20) {
 }
 
 export default () => {
-  return { searchIcons, levenshtein }
+  return { searchIcons, levenshtein, iconList }
 }

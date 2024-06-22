@@ -43,14 +43,12 @@ const isOpen = defineModel({
           to="/admin/config/app-name"
         />
         <v-list-item
-          title="App Logo"
-        />
-        <v-list-item
           title="Contact Us"
           to="/admin/config/contact-form-recipients"
         />
         <v-list-item
-          title="Theme"
+          title="Social Networks"
+          to="/admin/config/social-networks"
         />
       </v-list-group>
     </v-list>

@@ -8,7 +8,7 @@ const newEmailForm = ref<VForm>()
 const newEmail = ref('')
 
 const emailList = computed<string[]>({
-  get: () => value.value === undefined ? [] : value.value.split(','),
+  get: () => !value.value ? [] : value.value.split(','),
   set: val => value.value = val.join(','),
 })
 

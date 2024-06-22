@@ -1,29 +1,16 @@
 <script setup lang="ts">
-const networks = [
-  {
-    icon: 'mdi-facebook',
-    link: 'https://www.facebook.com/alvasori',
-  },
-  {
-    icon: 'mdi-linkedin',
-    link: 'https://www.linkedin.com/alvasori',
-  },
-  {
-    icon: 'mdi-instagram',
-    link: 'https://www.instagram.com/alvasori',
-  },
-]
+const { data: socialNetworks } = await useAsyncData('socialNetworks', () => useConfigStore().getConfigValue('social-networks', []))
 </script>
 
 <template>
-  <div>
+  <v-btn-group class="text-red-darken-3">
     <v-btn
-      v-for="(network, index) in networks"
+      v-for="(network, index) in socialNetworks"
       :key="index"
       :icon="network.icon"
       :href="network.link"
       class="mx-4"
       variant="text"
     />
-  </div>
+  </v-btn-group>
 </template>
