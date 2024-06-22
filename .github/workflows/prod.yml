@@ -27,4 +27,28 @@ jobs:
           VPS_USER: ${{ vars.VPS_USER }}
           VPS_IP_ADDRESS: ${{ vars.VPS_IP_ADDRESS }}
           VPS_PATH: ${{ vars.VPS_PATH }}
-        run: ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" "cd \"$VPS_PATH\" && git checkout main && git pull --rebase && bash -i .server/prod/build.sh"
+          DATABASE_URL: ${{ vars.DATABASE_URL }}
+          NUXT_SENDGRID_API_KEY: ${{ secrets.NUXT_SENDGRID_API_KEY }}
+          NUXT_RECAPTCHA_SECRET_KEY: ${{ secrets.NUXT_RECAPTCHA_SECRET_KEY }}
+          NUXT_PUBLIC_RECAPTCHA_SITE_KEY: ${{ secrets.NUXT_PUBLIC_RECAPTCHA_SITE_KEY }}
+        run: |
+          ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" "bash -i <<EOF
+          cd \"$VPS_PATH\"
+          git checkout main
+          git pull --rebase
+          pnpm install
+          export DATABASE_URL=\"$DATABASE_URL\"
+          npx prisma generate
+          npx prisma migrate deploy
+          unset DATABASE_URL
+          rm .env
+          cp .env.sample .env
+          sed -i \"s|{{ DATABASE_URL }}|${DATABASE_URL//\//\\/}|g\" .env
+          sed -i \"s|{{ NUXT_SENDGRID_API_KEY }}|${NUXT_SENDGRID_API_KEY//\//\\/}|g\" .env
+          sed -i \"s|{{ NUXT_RECAPTCHA_SECRET_KEY }}|${NUXT_RECAPTCHA_SECRET_KEY//\//\\/}|g\" .env
+          sed -i \"s|{{ NUXT_PUBLIC_RECAPTCHA_SITE_KEY }}|${NUXT_PUBLIC_RECAPTCHA_SITE_KEY//\//\\/}|g\" .env
+          pnpm build
+          pm2 delete alvasori
+          pm2 start ecosystem.config.cjs --env production
+          pm2 save
+          EOF"
