@@ -29,12 +29,12 @@ jobs:
           VPS_PATH: ${{ vars.VPS_PATH }}
           DATABASE_URL: ${{ vars.DATABASE_URL }}
         run: |
-          ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" <<'EOF'
-          cd "$VPS_PATH"
+          ssh -tt "$VPS_USER@$VPS_IP_ADDRESS" "bash -i <<EOF
+          cd \"$VPS_PATH\"
           git checkout stage
           git pull --rebase
           pnpm install
-          export DATABASE_URL="$DATABASE_URL"
+          export DATABASE_URL=\"$DATABASE_URL\"
           npx prisma generate
           npx prisma migrate deploy
           unset DATABASE_URL
@@ -42,4 +42,4 @@ jobs:
           pm2 delete alvasori-stage
           pm2 start ecosystem.config.cjs --env stage
           pm2 save
-          EOF
+          EOF"
