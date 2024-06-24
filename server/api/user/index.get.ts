@@ -3,7 +3,7 @@ export default eventHandler(async (event) => {
 
   const prisma = getPrismaClient()
   return prisma.user.findMany({
-    orderBy: { id: 'asc' },
+    orderBy: { createdAt: 'asc' },
     select: removeFieldsfromSelect(prisma.user, ['password']),
   })
 })
