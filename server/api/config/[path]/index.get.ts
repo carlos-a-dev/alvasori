@@ -1,4 +1,9 @@
 export default eventHandler(async (event) => {
-  return await getConfig(getRouterParam(event, 'path') ?? '')
-    || createError({ statusCode: 404 })
+  const config = await getConfig(getRouterParam(event, 'path') ?? '')
+
+  if (!config) {
+    throw createError({ statusCode: 404 })
+  }
+
+  return config
 })
