@@ -1,22 +1,32 @@
 <script setup lang="ts">
 import type { Page } from '@prisma/client'
+import { VForm } from 'vuetify/components'
 
 const { vRequired } = useValidation()
+const { successAlert, errorAlert } = useAlerts()
 
-const valid = ref(false)
 const loading = ref(false)
-const form = ref<HTMLFormElement | null>(null)
+const form = ref<VForm>()
 
 const page = reactive<Partial<Page>>({})
 
 async function onSubmit() {
   loading.value = true
-  const newPage = await $fetch('/api/page', {
-    method: 'POST',
-    body: JSON.stringify(page),
-  })
-  loading.value = false
-  await navigateTo(`/admin/page/${newPage.id}`)
+  try {
+    await $fetch('/api/page', {
+      method: 'POST',
+      body: page,
+    })
+    successAlert('Page saved!')
+    await navigateTo('/admin/page')
+  }
+  catch (error) {
+    console.error(error)
+    errorAlert('The page was not saved!')
+  }
+  finally {
+    loading.value = false
+  }
 }
 </script>
 
@@ -39,7 +49,7 @@ async function onSubmit() {
           v-tooltip="'Save'"
           variant="flat"
           icon="mdi-content-save"
-          :disabled="!valid"
+          :disabled="!form?.isValid"
           :loading="loading"
           @click="onSubmit()"
         />
@@ -52,7 +62,6 @@ async function onSubmit() {
       <template #text>
         <v-form
           ref="form"
-          v-model="valid"
           @submit.prevent="onSubmit()"
         >
           <v-container

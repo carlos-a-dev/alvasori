@@ -3,11 +3,12 @@ const { showConfirmDialog } = useConfirmDialog()
 
 const { data: blocks, refresh, status } = await useFetch('/api/block')
 
-async function deleteBlock(name: string) {
+async function deleteBlock(id: number) {
   try {
-    const confirm = await showConfirmDialog('Delete Block', `Are you sure to delete "${name}"?`)
+    const block = blocks.value?.find(block => block.id === id)
+    const confirm = await showConfirmDialog('Delete Block', `Are you sure to delete "${block?.name ?? id}"?`)
     if (confirm) {
-      await $fetch(`/api/block/${name}`, { method: 'DELETE' })
+      await $fetch(`/api/block/${id}`, { method: 'DELETE' })
       refresh()
     }
   }
@@ -46,7 +47,7 @@ async function deleteBlock(name: string) {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="blocks && blocks.length > 0">
             <tr
               v-for="block in blocks"
               :key="block.id"
@@ -58,18 +59,27 @@ async function deleteBlock(name: string) {
               <td>{{ block.updatedAt ? formatDate(block.updatedAt) : '-' }}</td>
               <td>
                 <v-btn
-                  class="text-blue-darken-3"
-                  variant="flat"
+                  class="text-info"
                   size="xs"
                   icon="mdi-pencil"
-                  :to="`/admin/block/${block.name}`"
+                  :to="`/admin/block/${block.id}`"
                 />
                 <v-btn
-                  class="text-red-darken-4"
-                  variant="flat"
+                  class="text-error"
                   size="xs"
-                  icon="mdi-trash-can"
-                  @click="deleteBlock(block.name)"
+                  icon="mdi-toy-brick-remove"
+                  @click="deleteBlock(block.id)"
+                />
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="100">
+                <v-empty-state
+                  icon="mdi-toy-brick-remove-outline"
+                  title="No blocks"
+                  text="Click on the Add button to create your first block"
                 />
               </td>
             </tr>

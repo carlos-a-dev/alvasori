@@ -5,7 +5,8 @@ const { data: pages, refresh, status } = await useFetch('/api/page')
 
 async function deletePage(id: number) {
   try {
-    const confirm = await showConfirmDialog('Delete Block', `Are you sure to delete "${id}"?`)
+    const page = pages.value?.find(page => page.id === id)
+    const confirm = await showConfirmDialog('Delete Page', `Are you sure to delete "${page?.slug ?? id}"?`)
     if (confirm) {
       await $fetch(`/api/page/${id}`, { method: 'DELETE' })
       refresh()
@@ -46,7 +47,7 @@ async function deletePage(id: number) {
               <th>Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody v-if="pages && pages?.length > 0">
             <tr
               v-for="page in pages"
               :key="page.id"
@@ -70,6 +71,16 @@ async function deletePage(id: number) {
                   size="xs"
                   icon="mdi-trash-can"
                   @click="deletePage(page.id)"
+                />
+              </td>
+            </tr>
+          </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="100">
+                <v-empty-state
+                  title="No pages"
+                  text="Click on the + button to create your first page"
                 />
               </td>
             </tr>
