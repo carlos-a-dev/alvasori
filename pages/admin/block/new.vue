@@ -11,12 +11,12 @@ const block = reactive<Partial<Block>>({})
 
 async function onSubmit() {
   loading.value = true
-  const newBlock = await $fetch('/api/block', {
+  await $fetch('/api/block', {
     method: 'POST',
     body: JSON.stringify(block),
   })
   loading.value = false
-  await navigateTo(`/admin/block/${newBlock.name}`)
+  await navigateTo(`/admin/block`)
 }
 </script>
 

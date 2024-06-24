@@ -4,23 +4,19 @@ import { Argon2id } from 'oslo/password'
 export default eventHandler(async (event) => {
   checkAuth(event)
 
-  const prisma = getPrismaClient()
-  const id = getRouterParam(event, 'id')
-  const body: Partial<User> = await readBody(event)
+  const data = await readBody<Partial<User>>(event)
 
-  body.id = id
-
-  if (body.password !== undefined && body.password.trim() !== '') {
-    body.password = await new Argon2id().hash(body.password)
+  if (data.password && data.password.trim() !== '') {
+    data.password = await new Argon2id().hash(data.password.trim())
   }
   else {
-    delete (body.password)
+    delete data.password
   }
 
-  return prisma.user.update({
+  return getPrismaClient().user.update({
     where: {
-      id: id,
+      id: getRouterParam(event, 'id'),
     },
-    data: body,
+    data,
   })
 })

@@ -1,10 +1,26 @@
 <script setup lang="ts">
-const { data: blocks } = await useAsyncData('blocks', () => $fetch('/api/block'))
+const { showConfirmDialog } = useConfirmDialog()
+
+const { data: blocks, refresh, status } = await useFetch('/api/block')
+
+async function deleteBlock(name: string) {
+  try {
+    const confirm = await showConfirmDialog('Delete Block', `Are you sure to delete "${name}"?`)
+    if (confirm) {
+      await $fetch(`/api/block/${name}`, { method: 'DELETE' })
+      refresh()
+    }
+  }
+  catch (error) { console.error(error) }
+}
 </script>
 
 <template>
   <v-container>
-    <v-card title="Blocks">
+    <v-card
+      title="Blocks"
+      :loading="status === 'pending'"
+    >
       <template #title>
         Blocks
       </template>
@@ -53,6 +69,7 @@ const { data: blocks } = await useAsyncData('blocks', () => $fetch('/api/block')
                   variant="flat"
                   size="xs"
                   icon="mdi-trash-can"
+                  @click="deleteBlock(block.name)"
                 />
               </td>
             </tr>

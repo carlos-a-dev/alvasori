@@ -1,18 +1,10 @@
-import type { Page } from '@prisma/client'
 import markdownParser from '@nuxt/content/transformers/markdown'
 import { serverQueryContent } from '#content/server'
 
 export default eventHandler(async (event) => {
-  const prisma = getPrismaClient()
-
   let slug = getRouterParam(event, 'slug')
 
-  const page: Page | null = await prisma.page.findUnique({
-    where: {
-      slug: slug,
-    },
-  })
-
+  const page = await getPrismaClient().page.findUnique({ where: { slug } })
   if (page !== null && markdownParser.parse !== undefined) {
     return markdownParser.parse(`${slug}.md`, page.content, {})
   }
@@ -21,8 +13,6 @@ export default eventHandler(async (event) => {
     slug = ''
   }
 
-  return await serverQueryContent(event, `/${slug}`).findOne() || createError({
-    statusCode: 404,
-    statusMessage: 'Page not found!',
-  })
+  return await serverQueryContent(event, `/${slug}`).findOne()
+    || createError({ statusCode: 404 })
 })

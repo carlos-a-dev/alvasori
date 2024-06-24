@@ -21,7 +21,7 @@ export default eventHandler(async (event) => {
   const validCaptcha = await verifyRecaptcha(body['g-recaptcha-response'])
 
   if (!validCaptcha) {
-    return createError({
+    throw createError({
       statusCode: 403,
       statusMessage: 'Invalid Captcha!',
     })
@@ -51,11 +51,7 @@ export default eventHandler(async (event) => {
     })
   }
 
-  const existingUser = await prisma.user.findFirst({
-    where: {
-      username: username,
-    },
-  })
+  const existingUser = await prisma.user.findFirst({ where: { username } })
 
   if (!existingUser) {
     throw createError({
@@ -76,8 +72,8 @@ export default eventHandler(async (event) => {
   }
 
   const session = await lucia.createSession(existingUser.id, {
-    // name: existingUser.name,
-    // email: existingUser.email,
+    name: existingUser.name,
+    email: existingUser.email,
   })
   appendHeader(
     event,
