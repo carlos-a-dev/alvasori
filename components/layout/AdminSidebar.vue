@@ -28,6 +28,11 @@ const isOpen = defineModel({
         prepend-icon="mdi-file-document"
         to="/admin/page"
       />
+      <v-list-item
+        title="Messages"
+        prepend-icon="mdi-chat"
+        to="/admin/message"
+      />
       <v-divider />
       <v-list-group value="Settings">
         <template #activator="{ props }">

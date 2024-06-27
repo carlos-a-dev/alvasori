@@ -1,11 +1,13 @@
 <script setup lang="ts">
 const { showConfirmDialog } = useConfirmDialog()
 
+const asgrid = ref()
 async function deleteItem(id: number, slug: string) {
   try {
     const confirm = await showConfirmDialog('Delete Page', `Are you sure to delete "${slug}"?`)
     if (confirm) {
       await $fetch(`/api/page/${id}`, { method: 'DELETE' })
+      asgrid.value.loadItems()
     }
   }
   catch (error) { console.error(error) }
@@ -31,6 +33,7 @@ const headers = [
       />
     </template>
     <as-grid
+      ref="asgrid"
       api-endpoint="/api/page/grid"
       :headers="headers"
     >

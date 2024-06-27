@@ -61,6 +61,10 @@ async function loadItems() {
 }
 
 watch(q, loadItems)
+
+defineExpose({
+  loadItems,
+})
 </script>
 
 <template>
