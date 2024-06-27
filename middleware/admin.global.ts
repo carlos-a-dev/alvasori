@@ -2,7 +2,11 @@
 export default defineNuxtRouteMiddleware(async (to) => {
   if (!to.path.startsWith('/admin')) return
 
-  const user = await $fetch('/api/auth/user')
+  const user = await $fetch('/api/auth/user', {
+    params: {
+      t: Date.now(),
+    },
+  })
 
   if (!user) {
     if (to.path !== '/admin/login') {
