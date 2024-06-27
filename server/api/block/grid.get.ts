@@ -5,9 +5,13 @@ export default eventHandler(async (event) => {
 
   const prisma = getPrismaClient()
 
-  const args: Prisma.BlockFindManyArgs = {
+  const baseArgs: Prisma.BlockFindManyArgs = {
+    orderBy: { id: 'asc' },
     select: removeFieldsfromSelect<Prisma.BlockSelect>(prisma.block, ['content']),
   }
 
-  return await prisma.block.findMany(args)
+  return {
+    items: await prisma.block.findMany(parseQuery(event, baseArgs)),
+    count: await prisma.block.count(),
+  }
 })

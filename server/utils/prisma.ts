@@ -11,7 +11,7 @@ export const getPrismaClient = () => {
   return client.value
 }
 
-export const removeFieldsfromSelect = <T extends Record<string, boolean> = Record<string, boolean>>(model: { fields: Record<string, unknown> }, blacklist: string[]) => {
+export const removeFieldsfromSelect = <T extends Record<string, boolean | unknown> = Record<string, boolean>>(model: { fields: Record<string, unknown> }, blacklist: string[]) => {
   return Object.keys(model.fields).reduce((accum: Record<string, boolean>, key: string) => {
     accum[key] = blacklist.indexOf(key) < 0
     return accum

@@ -4,7 +4,7 @@ export default eventHandler(async (event) => {
   checkAuth(event)
 
   const prisma = getPrismaClient()
-  return prisma.page.findMany({
+  return await prisma.page.findMany({
     orderBy: { id: 'asc' },
     select: removeFieldsfromSelect<Prisma.PageSelect>(prisma.page, ['content']),
   })

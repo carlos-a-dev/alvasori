@@ -1,92 +1,54 @@
 <script setup lang="ts">
 const { showConfirmDialog } = useConfirmDialog()
 
-const { data: pages, refresh, status } = await useFetch('/api/page')
-
-async function deletePage(id: number) {
+async function deleteItem(id: number, slug: string) {
   try {
-    const page = pages.value?.find(page => page.id === id)
-    const confirm = await showConfirmDialog('Delete Page', `Are you sure to delete "${page?.slug ?? id}"?`)
+    const confirm = await showConfirmDialog('Delete Page', `Are you sure to delete "${slug}"?`)
     if (confirm) {
       await $fetch(`/api/page/${id}`, { method: 'DELETE' })
-      refresh()
     }
   }
   catch (error) { console.error(error) }
 }
+
+const headers = [
+  { title: 'ID', key: 'id' },
+  { title: 'Slug', key: 'slug' },
+  { title: 'Description', key: 'description' },
+  { title: 'Created At', key: 'createdAt', value: (page: Record<string, string>) => formatDate(page.createdAt) },
+  { title: 'Updated At', key: 'updatedAt', value: (page: Record<string, string>) => formatDate(page.updatedAt) },
+  { title: 'Actions', key: 'actions', sortable: false },
+]
 </script>
 
 <template>
-  <v-container>
-    <v-card
-      title="Pages"
-      :loading="status === 'pending'"
+  <container-grid title="Pages">
+    <template #append>
+      <v-btn
+        v-tooltip="'New Page'"
+        icon="mdi-plus"
+        to="/admin/page/new"
+      />
+    </template>
+    <as-grid
+      api-endpoint="/api/page/grid"
+      :headers="headers"
     >
-      <template #title>
-        Pages
-      </template>
-
-      <template #append>
+      <!-- eslint-disable-next-line vue/valid-v-slot -->
+      <template #item.actions="{ item }">
         <v-btn
-          v-tooltip="'New page'"
-          icon="mdi-plus"
-          variant="flat"
-          to="/admin/page/new"
+          class="text-info"
+          size="xs"
+          icon="mdi-pencil"
+          :to="`/admin/page/${item.id}`"
+        />
+        <v-btn
+          class="text-error"
+          size="xs"
+          icon="mdi-trash-can"
+          @click="deleteItem(item.id, item.slug)"
         />
       </template>
-
-      <template #text>
-        <v-table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Slug</th>
-              <th>Description</th>
-              <th>Created At</th>
-              <th>Updated At</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody v-if="pages && pages?.length > 0">
-            <tr
-              v-for="page in pages"
-              :key="page.id"
-            >
-              <td>{{ page.id }}</td>
-              <td>{{ page.slug }}</td>
-              <td>{{ page.description }}</td>
-              <td>{{ formatDate(page.createdAt) }}</td>
-              <td>{{ page.updatedAt ? formatDate(page.updatedAt) : '-' }}</td>
-              <td>
-                <v-btn
-                  class="text-blue-darken-3"
-                  variant="flat"
-                  size="xs"
-                  icon="mdi-pencil"
-                  :to="`/admin/page/${page.id}`"
-                />
-                <v-btn
-                  class="text-red-darken-4"
-                  variant="flat"
-                  size="xs"
-                  icon="mdi-trash-can"
-                  @click="deletePage(page.id)"
-                />
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td colspan="100">
-                <v-empty-state
-                  title="No pages"
-                  text="Click on the + button to create your first page"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-      </template>
-    </v-card>
-  </v-container>
+    </as-grid>
+  </container-grid>
 </template>

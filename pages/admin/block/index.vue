@@ -1,91 +1,54 @@
 <script setup lang="ts">
 const { showConfirmDialog } = useConfirmDialog()
 
-const { data: blocks, refresh, status } = await useFetch('/api/block')
-
-async function deleteBlock(id: number) {
+async function deleteItem(id: number, name: string) {
   try {
-    const block = blocks.value?.find(block => block.id === id)
-    const confirm = await showConfirmDialog('Delete Block', `Are you sure to delete "${block?.name ?? id}"?`)
+    const confirm = await showConfirmDialog('Delete Block', `Are you sure to delete "${name}"?`)
     if (confirm) {
       await $fetch(`/api/block/${id}`, { method: 'DELETE' })
-      refresh()
     }
   }
   catch (error) { console.error(error) }
 }
+
+const headers = [
+  { title: 'ID', key: 'id' },
+  { title: 'Name', key: 'name' },
+  { title: 'Description', key: 'description' },
+  { title: 'Created At', key: 'createdAt', value: (block: Record<string, string>) => formatDate(block.createdAt) },
+  { title: 'Updated At', key: 'updatedAt', value: (block: Record<string, string>) => formatDate(block.updatedAt) },
+  { title: 'Actions', key: 'actions', sortable: false },
+]
 </script>
 
 <template>
-  <v-container>
-    <v-card
-      title="Blocks"
-      :loading="status === 'pending'"
+  <container-grid title="Blocks">
+    <template #append>
+      <v-btn
+        v-tooltip="'New Block'"
+        icon="mdi-toy-brick-plus"
+        to="/admin/block/new"
+      />
+    </template>
+    <as-grid
+      api-endpoint="/api/block/grid"
+      :headers="headers"
     >
-      <template #title>
-        Blocks
-      </template>
-
-      <template #append>
+      <!-- eslint-disable-next-line vue/valid-v-slot -->
+      <template #item.actions="{ item }">
         <v-btn
-          v-tooltip="'New block'"
-          icon="mdi-toy-brick-plus"
-          variant="flat"
-          to="/admin/block/new"
+          class="text-info"
+          size="xs"
+          icon="mdi-pencil"
+          :to="`/admin/block/${item.id}`"
+        />
+        <v-btn
+          class="text-error"
+          size="xs"
+          icon="mdi-toy-brick-remove"
+          @click="deleteItem(item.id, item.name)"
         />
       </template>
-
-      <template #text>
-        <v-table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th>Description</th>
-              <th>Created At</th>
-              <th>Updated At</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody v-if="blocks && blocks.length > 0">
-            <tr
-              v-for="block in blocks"
-              :key="block.id"
-            >
-              <td>{{ block.id }}</td>
-              <td>{{ block.name }}</td>
-              <td>{{ block.description }}</td>
-              <td>{{ formatDate(block.createdAt) }}</td>
-              <td>{{ block.updatedAt ? formatDate(block.updatedAt) : '-' }}</td>
-              <td>
-                <v-btn
-                  class="text-info"
-                  size="xs"
-                  icon="mdi-pencil"
-                  :to="`/admin/block/${block.id}`"
-                />
-                <v-btn
-                  class="text-error"
-                  size="xs"
-                  icon="mdi-toy-brick-remove"
-                  @click="deleteBlock(block.id)"
-                />
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td colspan="100">
-                <v-empty-state
-                  icon="mdi-toy-brick-remove-outline"
-                  title="No blocks"
-                  text="Click on the Add button to create your first block"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </v-table>
-      </template>
-    </v-card>
-  </v-container>
+    </as-grid>
+  </container-grid>
 </template>
