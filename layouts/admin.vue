@@ -1,16 +1,11 @@
 <script setup lang="ts">
-const { useAuthenticatedUser } = useAuth()
-
-const user = useAuthenticatedUser()
+const user = useAuth().useAuthenticatedUser()
 
 const drawerOpen = ref(false)
 
 async function logout() {
-  await $fetch('/api/auth/logout', {
-    method: 'POST',
-  })
-
-  await navigateTo('/admin/login')
+  await $fetch('/api/auth/logout', { method: 'POST' })
+  navigateTo('/admin/login')
 }
 </script>
 

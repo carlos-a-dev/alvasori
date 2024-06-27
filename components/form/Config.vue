@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { VForm } from 'vuetify/components'
-import type { Config } from '@prisma/client'
+import type { InternalApi } from 'nitropack'
 
 const { successAlert, errorAlert } = useAlerts()
 
 const props = defineProps<{
-  config: Partial<Config>
+  config: InternalApi['/api/config/:path']['get']
 }>()
 
 if (props.config === undefined) {
@@ -14,7 +14,7 @@ if (props.config === undefined) {
   })
 }
 
-const payload = ref(props.config)
+const payload = ref({ ...props.config })
 const loading = ref(false)
 const form = ref<VForm>()
 
@@ -28,6 +28,7 @@ async function onSubmit() {
       },
     })
     successAlert('Success!')
+    refreshNuxtData()
   }
   catch (err) {
     if (err instanceof Error) {
@@ -39,12 +40,17 @@ async function onSubmit() {
     loading.value = false
   }
 }
+
+function onReset() {
+  payload.value = { ...props.config }
+}
 </script>
 
 <template>
   <v-form
     ref="form"
     @submit.prevent="onSubmit()"
+    @reset.prevent="onReset()"
   >
     <v-container
       class="px-0"
@@ -55,14 +61,27 @@ async function onSubmit() {
         :is="resolveComponent(payload.component ?? 'VTextField')"
         v-model="payload.value"
       />
-      <v-btn
-        :disabled="!form?.isValid"
-        :loading="loading"
-        prepend-icon="mdi-content-save"
-        text="Save"
-        type="submit"
-        color="primary"
-      />
+      <v-btn-group
+        rounded="pill"
+        density="comfortable"
+      >
+        <v-btn
+          :disabled="!form?.isValid"
+          :loading="loading"
+          prepend-icon="mdi-content-save"
+          text="Save"
+          type="submit"
+          color="primary"
+        />
+        <v-btn
+          :disabled="!form?.isValid"
+          :loading="loading"
+          prepend-icon="mdi-restart"
+          text="Reset"
+          color="secondary"
+          @click="onReset()"
+        />
+      </v-btn-group>
     </v-container>
   </v-form>
 </template>

@@ -10,9 +10,7 @@ export default defineNuxtPlugin((nuxtApp) => {
     loaderOptions: {
       autoHideBadge: true,
       useRecaptchaNet: true,
-      renderParameters: {
-        hl: 'id',
-      },
+      renderParameters: { hl: 'id' },
     },
   }
   nuxtApp.vueApp.use(VueReCaptcha, options)

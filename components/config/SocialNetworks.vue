@@ -89,6 +89,10 @@ async function addSocial() {
           :name="id.value"
         >
         <v-container class="pa-0">
+          <div class="w-100 d-flex justify-center">
+            <layout-social-btns :social-networks="list" />
+          </div>
+          <v-divider />
           <v-form
             ref="socialForm"
             @submit.prevent="addSocial"

@@ -1,6 +1,6 @@
 import type { InternalApi } from 'nitropack'
 
-export type Block = InternalApi['/api/block/:name']['get']
+export type Block = InternalApi['/api/block/byName/:name']['get']
 
 export type BlockCollection = { [key: string]: (Block | null) }
 
@@ -10,7 +10,7 @@ export const useBlockStore = defineStore('block', () => {
   async function fetchBlock(name: string): Promise<Block | null> {
     if (blocks.value[name] === undefined) {
       try {
-        const block = await $fetch(`/api/block/${name}`)
+        const block = await $fetch(`/api/block/byName/${name}`)
         blocks.value[name] = block
       }
       catch (err) {
