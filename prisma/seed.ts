@@ -148,6 +148,31 @@ async function addConfigs() {
       description: 'Social Networks',
     },
   })
+
+  await prisma.config.upsert({
+    where: { path: 'navigation-links' },
+    update: {},
+    create: {
+      path: 'navigation-links',
+      type: 'json',
+      value: JSON.stringify([
+        {
+          label: 'Home',
+          link: '/',
+        },
+        {
+          label: 'About Us',
+          link: '/about',
+        },
+        {
+          label: 'Contact Us',
+          link: '/contactus',
+        },
+      ]),
+      component: 'ConfigNavigationLinks',
+      description: 'Navigation Links',
+    },
+  })
 }
 
 await main()
