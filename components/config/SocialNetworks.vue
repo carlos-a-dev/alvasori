@@ -159,7 +159,7 @@ async function addSocial() {
                       variant="outlined"
                       density="compact"
                       hide-details="auto"
-                      :rules="[vRequired, val => iconList.indexOf(val) >= 0 || 'Invalid Icon.']"
+                      :rules="[vRequired, (val: string) => iconList.indexOf(val) >= 0 || 'Invalid Icon.']"
                     >
                       <template #item="{ index, item, props }">
                         <v-list-item

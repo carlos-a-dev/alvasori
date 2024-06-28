@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import type { Block } from '@/stores/useBlockStore.js'
+import AMarkdown from '../AMarkdown.vue'
+import type { Block } from '@/stores/useBlockStore'
 
 const props = defineProps({
   name: String,
@@ -22,5 +23,9 @@ watch(() => props.name, async (blockName) => {
 </script>
 
 <template>
-  <a-markdown :value="block?.content ?? ''" />
+  <a-markdown
+    v-if="block?.content"
+    v-bind="$attrs"
+    :value="block?.content"
+  />
 </template>
