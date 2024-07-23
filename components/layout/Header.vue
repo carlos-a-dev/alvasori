@@ -21,7 +21,7 @@ const onScroll = debounce(() => {
       <v-avatar
         class="me-4 "
         size="48"
-        image="/Logo.webp"
+        image="/favicon.svg"
         :rounded="false"
       />
 
