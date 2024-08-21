@@ -1,6 +1,6 @@
 import type { Config, Prisma } from '@prisma/client'
 
-export async function getConfig(path: string, options: Partial<Prisma.ConfigFindUniqueArgs> = {}) {
+export async function getConfig(path: string, options: Partial<Prisma.ConfigFindUniqueArgs> = {}): Promise<Config | null> {
   const prisma = getPrismaClient()
 
   return await prisma.config.findUnique(Object.assign({

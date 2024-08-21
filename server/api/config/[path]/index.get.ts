@@ -1,7 +1,9 @@
 export default eventHandler(async (event) => {
-  const config = await getConfig(getRouterParam(event, 'path') ?? '')
+  const config = await getPrismaClient().config.findUnique({
+    where: { path: getRouterParam(event, 'path') },
+  })
 
-  if (!config) {
+  if (config === null) {
     throw createError({ statusCode: 404 })
   }
 

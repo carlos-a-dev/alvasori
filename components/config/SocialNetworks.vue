@@ -89,6 +89,10 @@ async function addSocial() {
           :name="id.value"
         >
         <v-container class="pa-0">
+          <div class="w-100 d-flex justify-center">
+            <layout-social-btns :social-networks="list" />
+          </div>
+          <v-divider />
           <v-form
             ref="socialForm"
             @submit.prevent="addSocial"
@@ -155,7 +159,7 @@ async function addSocial() {
                       variant="outlined"
                       density="compact"
                       hide-details="auto"
-                      :rules="[vRequired, val => iconList.indexOf(val) >= 0 || 'Invalid Icon.']"
+                      :rules="[vRequired, (val: string) => iconList.indexOf(val) >= 0 || 'Invalid Icon.']"
                     >
                       <template #item="{ index, item, props }">
                         <v-list-item

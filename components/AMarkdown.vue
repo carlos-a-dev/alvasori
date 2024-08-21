@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import markdownParser from '@nuxt/content/transformers/markdown'
 import type { ParsedContent } from '@nuxt/content/types'
-import { watch, ref, toRef } from 'vue'
 
 interface Props {
   value: string | ParsedContent
@@ -13,8 +12,6 @@ const props = withDefaults(defineProps<Props>(), {
   value: '',
   documentId: '',
 })
-
-const value = toRef(props, 'value')
 
 const parsedValue = ref<ParsedContent>({ _id: '', body: { type: 'root', children: [] } })
 
@@ -30,7 +27,7 @@ function unwrapContent(content: ParsedContent, tag: string) {
   return content
 }
 
-watch(value, async (newValue) => {
+watch(() => props.value, async (newValue) => {
   if (typeof newValue !== 'string') {
     parsedValue.value = newValue
     return

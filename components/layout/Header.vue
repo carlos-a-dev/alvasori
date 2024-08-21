@@ -1,10 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <script setup lang="ts">
-const links = [
-  { label: 'Home', to: '/' },
-  { label: 'About Us', to: '/about' },
-  { label: 'Contact Us', to: '/contactus' },
-]
+const { data: links } = await useAsyncData('navigation-links', () => useConfigStore().getConfigValue('navigation-links'))
 
 const transparent = ref(true)
 
@@ -25,7 +21,7 @@ const onScroll = debounce(() => {
       <v-avatar
         class="me-4 "
         size="48"
-        image="/Logo.webp"
+        image="/favicon.svg"
         :rounded="false"
       />
 
@@ -37,7 +33,7 @@ const onScroll = debounce(() => {
         v-for="(link, index) in links"
         :key="index"
         :text="link.label"
-        :to="link.to"
+        :to="link.link"
         rounded
         variant="text"
       />

@@ -55,6 +55,10 @@ const isOpen = defineModel({
           title="Social Networks"
           to="/admin/config/social-networks"
         />
+        <v-list-item
+          title="Navigation Links"
+          to="/admin/config/navigation-links"
+        />
       </v-list-group>
     </v-list>
   </v-navigation-drawer>
